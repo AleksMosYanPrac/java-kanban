@@ -2,10 +2,7 @@ package ru.yandex.practicum.kanban.repository;
 
 import ru.yandex.practicum.kanban.model.Subtask;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class SubtaskRepository {
 
@@ -16,7 +13,7 @@ public class SubtaskRepository {
     }
 
     public List<Subtask> getAll() {
-        return subTasks.values().stream().toList();
+        return new ArrayList<>(subTasks.values());
     }
 
     public void deleteAll() {

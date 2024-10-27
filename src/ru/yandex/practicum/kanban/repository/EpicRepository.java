@@ -2,10 +2,7 @@ package ru.yandex.practicum.kanban.repository;
 
 import ru.yandex.practicum.kanban.model.Epic;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class EpicRepository {
 
@@ -16,7 +13,7 @@ public class EpicRepository {
     }
 
     public List<Epic> getAll() {
-        return epicTasks.values().stream().toList();
+        return new ArrayList<>(epicTasks.values());
     }
 
     public void deleteAll() {

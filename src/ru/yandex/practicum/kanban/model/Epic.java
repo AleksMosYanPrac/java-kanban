@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Epic extends Task {
 
@@ -29,18 +30,11 @@ public class Epic extends Task {
     }
 
     private void checkAndUpdateEpicStatus() {
-        if (subtasks.isEmpty()) {
-            super.status = Status.NEW;
+        Set<Status> subtaskStatuses = subtasks.stream().map(Subtask::getStatus).collect(Collectors.toSet());
+        if (subtaskStatuses.size() > 1) {
+            super.status = Status.IN_PROGRESS;
         } else {
-            Set<Status> subtaskStatuses = new HashSet<>();
-            for (Subtask subtask : subtasks) {
-                subtaskStatuses.add(subtask.getStatus());
-            }
-            if (subtaskStatuses.size() > 1) {
-                super.status = Status.IN_PROGRESS;
-            } else {
-                super.status = subtaskStatuses.iterator().next();
-            }
+            super.status = subtaskStatuses.stream().findFirst().orElse(Status.NEW);
         }
     }
 

@@ -58,12 +58,13 @@ public class KanbanManagerTestMain {
         System.out.println("Задачи задач после удаления:");
         printAll(taskRepository, epicRepository, subtaskRepository);
 
-        subtask1.setId(4);
-        taskManager.deleteSubtask(subtask1);
-
         System.out.println("Задачи задач после удаления одной подзадачи:");
         printAll(taskRepository, epicRepository, subtaskRepository);
 
+        System.out.println("Статус Эпика должен вернуться к New после удаления всех его субтасков");
+        taskManager.deleteSubtask(subtask2);
+        taskManager.deleteSubtask(subtask1);
+        printAll(taskRepository, epicRepository, subtaskRepository);
     }
 
     private static void printAll(TaskRepository taskRepository,

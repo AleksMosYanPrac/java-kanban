@@ -1,6 +1,8 @@
 package ru.yandex.practicum.kanban;
 
 import ru.yandex.practicum.kanban.model.Status;
+import ru.yandex.practicum.kanban.model.Subtask;
+import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.model.TaskDTO;
 import ru.yandex.practicum.kanban.repository.EpicRepository;
 import ru.yandex.practicum.kanban.repository.SubtaskRepository;
@@ -65,6 +67,29 @@ public class KanbanManagerTestMain {
         taskManager.deleteSubtask(subtask2);
         taskManager.deleteSubtask(subtask1);
         printAll(taskRepository, epicRepository, subtaskRepository);
+
+        System.out.println("Тесты на equals и hashCode");
+        Task object1 = new Task(10, null, null, null);
+        Task object2 = new Task(10, null, null, Status.NEW);
+        Task object3 = new Task(10, null, " ", Status.IN_PROGRESS);
+        if (object1.equals(object2) & object2.equals(object1) & !(object1.equals(null))) {
+            if (object3.equals(object2) & object1.equals(object3) & !(object2.equals(null))) {
+                if (object1.hashCode() == object2.hashCode() & object3.hashCode() == object1.hashCode()) {
+                    System.out.print(" object1.hashCode()=" + object1.hashCode());
+                    System.out.print(" object2.hashCode()=" + object2.hashCode());
+                    System.out.print(" object2.hashCode()=" + object3.hashCode());
+                    System.out.println();
+                }
+            }
+        }
+        Subtask st1 = new Subtask(12, null, null, null);
+        Subtask st2 = new Subtask(12, null, null, null);
+        if (st1.equals(st2) & st2.equals(st1)) {
+            if (st1.hashCode() == st2.hashCode()) {
+                System.out.print(" st1.hashCode()=" + st1.hashCode());
+                System.out.print(" st2.hashCode()=" + st2.hashCode());
+            }
+        }
     }
 
     private static void printAll(TaskRepository taskRepository,

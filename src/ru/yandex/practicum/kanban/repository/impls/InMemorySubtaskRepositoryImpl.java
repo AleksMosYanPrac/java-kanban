@@ -1,14 +1,15 @@
-package ru.yandex.practicum.kanban.repository;
+package ru.yandex.practicum.kanban.repository.impls;
 
 import ru.yandex.practicum.kanban.model.Subtask;
+import ru.yandex.practicum.kanban.repository.Repository;
 
 import java.util.*;
 
-public class SubtaskRepository {
+public class InMemorySubtaskRepositoryImpl implements Repository<Subtask> {
 
     private Map<Integer, Subtask> subTasks;
 
-    public SubtaskRepository() {
+    public InMemorySubtaskRepositoryImpl() {
         this.subTasks = new HashMap<>();
     }
 

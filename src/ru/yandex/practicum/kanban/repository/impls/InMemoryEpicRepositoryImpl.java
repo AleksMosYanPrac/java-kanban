@@ -1,14 +1,15 @@
-package ru.yandex.practicum.kanban.repository;
+package ru.yandex.practicum.kanban.repository.impls;
 
 import ru.yandex.practicum.kanban.model.Epic;
+import ru.yandex.practicum.kanban.repository.Repository;
 
 import java.util.*;
 
-public class EpicRepository {
+public class InMemoryEpicRepositoryImpl implements Repository<Epic> {
 
     private Map<Integer, Epic> epicTasks;
 
-    public EpicRepository() {
+    public InMemoryEpicRepositoryImpl() {
         this.epicTasks = new HashMap<>();
     }
 

@@ -5,7 +5,7 @@ import ru.yandex.practicum.kanban.repository.HistoryRepository;
 
 import java.util.List;
 
-public class HistoryManagerImpl implements HistoryManager{
+public class HistoryManagerImpl implements HistoryManager {
 
     private final HistoryRepository historyRepository;
 
@@ -16,6 +16,11 @@ public class HistoryManagerImpl implements HistoryManager{
     @Override
     public void add(Task task) {
         historyRepository.add(task);
+    }
+
+    @Override
+    public void remove(int id) {
+        historyRepository.deleteFromHistory(id);
     }
 
     @Override

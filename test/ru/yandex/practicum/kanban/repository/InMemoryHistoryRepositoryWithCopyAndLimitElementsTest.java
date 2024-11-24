@@ -8,12 +8,12 @@ import ru.yandex.practicum.kanban.model.Epic;
 import ru.yandex.practicum.kanban.model.Status;
 import ru.yandex.practicum.kanban.model.Subtask;
 import ru.yandex.practicum.kanban.model.Task;
-import ru.yandex.practicum.kanban.repository.impls.InMemoryHistoryRepository;
+import ru.yandex.practicum.kanban.repository.impls.InMemoryHistoryRepositoryWithCopyAndLimitElements;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class InMemoryHistoryRepositoryTest {
+class InMemoryHistoryRepositoryWithCopyAndLimitElementsTest {
 
     static List<Task> tasks = new ArrayList<>();
 
@@ -29,8 +29,8 @@ class InMemoryHistoryRepositoryTest {
     }
 
     @BeforeEach
-    void initEmptyManager() {
-        this.historyRepository = new InMemoryHistoryRepository();
+    void initEmptyRepository() {
+        this.historyRepository = new InMemoryHistoryRepositoryWithCopyAndLimitElements();
     }
 
     @Test
@@ -51,7 +51,19 @@ class InMemoryHistoryRepositoryTest {
         List<Task> historyList = historyRepository.get();
         int taskIdAtFirstPosition = historyList.getFirst().getId();
 
-        Assertions.assertEquals(1,taskIdAtFirstPosition);
+        Assertions.assertEquals(1, taskIdAtFirstPosition);
         Assertions.assertEquals(10, historyList.size());
+    }
+
+    @Test
+    void shouldDeleteTaskFromHistoryByIntegerId() {
+        int historySize = historyRepository.get().size();
+        int taskId = 100;
+        Task task = new Task(taskId, "task", "description", Status.NEW);
+        historyRepository.add(task);
+
+        historyRepository.deleteFromHistory(taskId);
+
+        Assertions.assertEquals(historySize, historyRepository.get().size());
     }
 }

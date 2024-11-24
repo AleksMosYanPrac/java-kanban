@@ -10,4 +10,5 @@ public interface HistoryRepository {
 
     List<Task> get();
 
+    void deleteFromHistory(int id);
 }

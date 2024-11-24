@@ -5,10 +5,7 @@ import ru.yandex.practicum.kanban.model.Subtask;
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.repository.HistoryRepository;
 import ru.yandex.practicum.kanban.repository.Repository;
-import ru.yandex.practicum.kanban.repository.impls.InMemoryEpicRepositoryImpl;
-import ru.yandex.practicum.kanban.repository.impls.InMemoryHistoryRepository;
-import ru.yandex.practicum.kanban.repository.impls.InMemorySubtaskRepositoryImpl;
-import ru.yandex.practicum.kanban.repository.impls.InMemoryTaskRepositoryImpl;
+import ru.yandex.practicum.kanban.repository.impls.*;
 import ru.yandex.practicum.kanban.service.HistoryManager;
 import ru.yandex.practicum.kanban.service.HistoryManagerImpl;
 import ru.yandex.practicum.kanban.service.TaskManager;
@@ -24,9 +21,18 @@ public class Managers {
         Repository<Epic> epicRepository = new InMemoryEpicRepositoryImpl();
         Repository<Subtask> subtaskRepository = new InMemorySubtaskRepositoryImpl();
 
-        HistoryRepository historyRepository = new InMemoryHistoryRepository();
+        HistoryRepository historyRepository = new InMemoryHistoryRepositoryWithCopyAndLimitElements();
         HistoryManager historyManager = new HistoryManagerImpl(historyRepository);
 
+        return new TaskManagerImpl(taskRepository, epicRepository, subtaskRepository, historyManager);
+    }
+
+    public static TaskManager getDefault(Repository<Task> taskRepository,
+                                         Repository<Subtask> subtaskRepository,
+                                         Repository<Epic> epicRepository,
+                                         HistoryRepository historyRepository) {
+
+        HistoryManager historyManager = new HistoryManagerImpl(historyRepository);
         return new TaskManagerImpl(taskRepository, epicRepository, subtaskRepository, historyManager);
     }
 }

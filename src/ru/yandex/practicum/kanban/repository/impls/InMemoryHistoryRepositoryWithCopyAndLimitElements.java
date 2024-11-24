@@ -5,19 +5,19 @@ import ru.yandex.practicum.kanban.repository.HistoryRepository;
 
 import java.util.*;
 
-public class InMemoryHistoryRepository implements HistoryRepository {
+public class InMemoryHistoryRepositoryWithCopyAndLimitElements implements HistoryRepository {
     private static int NUMBER_OF_ELEMENTS = 10;
 
     private Deque<Task> viewedTask;
 
-    public InMemoryHistoryRepository() {
+    public InMemoryHistoryRepositoryWithCopyAndLimitElements() {
         this.viewedTask = new ArrayDeque<>();
     }
 
     @Override
     public void add(Task task) {
         viewedTask.offer(task);
-        if(viewedTask.size()>NUMBER_OF_ELEMENTS){
+        if (viewedTask.size() > NUMBER_OF_ELEMENTS) {
             viewedTask.pollFirst();
         }
     }
@@ -25,5 +25,10 @@ public class InMemoryHistoryRepository implements HistoryRepository {
     @Override
     public List<Task> get() {
         return new ArrayList<>(viewedTask);
+    }
+
+    @Override
+    public void deleteFromHistory(int id) {
+        viewedTask.removeIf(task -> task.getId() == id);
     }
 }

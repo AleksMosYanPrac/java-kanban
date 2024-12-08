@@ -15,16 +15,16 @@ public class HistoryManagerImpl implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        historyRepository.add(task);
+        historyRepository.addToList(task);
     }
 
     @Override
     public void remove(int id) {
-        historyRepository.deleteFromHistory(id);
+        historyRepository.deleteFromList(id);
     }
 
     @Override
     public List<Task> getHistory() {
-        return historyRepository.get();
+        return historyRepository.listOfViewedTasks();
     }
 }

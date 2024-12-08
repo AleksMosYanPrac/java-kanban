@@ -34,21 +34,21 @@ class InMemoryHistoryRepositoryWithCopyAndLimitElementsTest {
     }
 
     @Test
-    void canAddModelObjects() {
+    void canAddToListModelObjects() {
         for (Task task : tasks) {
-            historyRepository.add(task);
+            historyRepository.addToList(task);
         }
-        Assertions.assertEquals(tasks, historyRepository.get());
+        Assertions.assertEquals(tasks, historyRepository.listOfViewedTasks());
     }
 
     @Test
     void canDeleteOldTaskAndPutNewWhenCapacityMoreThan10() {
         for (int i = 0; i < 11; i++) {
             Task task = new Task(i, "task", "description", Status.NEW);
-            historyRepository.add(task);
+            historyRepository.addToList(task);
         }
 
-        List<Task> historyList = historyRepository.get();
+        List<Task> historyList = historyRepository.listOfViewedTasks();
         int taskIdAtFirstPosition = historyList.getFirst().getId();
 
         Assertions.assertEquals(1, taskIdAtFirstPosition);
@@ -57,13 +57,14 @@ class InMemoryHistoryRepositoryWithCopyAndLimitElementsTest {
 
     @Test
     void shouldDeleteTaskFromHistoryByIntegerId() {
-        int historySize = historyRepository.get().size();
+        int historySize = historyRepository.listOfViewedTasks().size();
         int taskId = 100;
         Task task = new Task(taskId, "task", "description", Status.NEW);
-        historyRepository.add(task);
+        historyRepository.addToList(task);
 
-        historyRepository.deleteFromHistory(taskId);
+        historyRepository.deleteFromList(taskId);
 
-        Assertions.assertEquals(historySize, historyRepository.get().size());
+        Assertions.assertEquals(historySize, historyRepository.listOfViewedTasks().size());
+        Assertions.assertFalse(historyRepository.listOfViewedTasks().contains(task));
     }
 }

@@ -7,25 +7,25 @@ import java.util.*;
 
 public class InMemoryHistoryRepositoryWithoutCopyAndLimitElements implements HistoryRepository {
 
-    private MyLinkedList<Task> viewedTasks;
+    private MyLinkedList<Task> viewedTasksList;
 
     public InMemoryHistoryRepositoryWithoutCopyAndLimitElements() {
-        this.viewedTasks = new MyLinkedList<>();
+        this.viewedTasksList = new MyLinkedList<>();
     }
 
     @Override
-    public void add(Task task) {
-        viewedTasks.add(task);
+    public void addToList(Task task) {
+        viewedTasksList.add(task);
     }
 
     @Override
-    public List<Task> get() {
-        return viewedTasks.toList();
+    public List<Task> listOfViewedTasks() {
+        return viewedTasksList.toList();
     }
 
     @Override
-    public void deleteFromHistory(int id) {
-        viewedTasks.removeNodeIfPresent(id);
+    public void deleteFromList(int id) {
+        viewedTasksList.removeNodeIfPresent(id);
     }
 
     private static class MyLinkedList<E extends Task> {
@@ -56,7 +56,7 @@ public class InMemoryHistoryRepositoryWithoutCopyAndLimitElements implements His
             map.put(e.getId(), node);
         }
 
-        public void removeNodeIfPresent(int index) {
+        void removeNodeIfPresent(int index) {
             Node<E> removingNode = map.get(index);
             if (Objects.nonNull(removingNode)) {
                 if (removingNode == tail) {
@@ -115,7 +115,7 @@ public class InMemoryHistoryRepositoryWithoutCopyAndLimitElements implements His
         }
 
         List<E> toList() {
-            List<E> result = new ArrayList<>();
+            List<E> result = new ArrayList<>(map.size());
             for (Node<E> x = head; x != null; x = x.next) {
                 result.add(x.item);
             }

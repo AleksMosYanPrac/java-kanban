@@ -8,27 +8,27 @@ import java.util.*;
 public class InMemoryHistoryRepositoryWithCopyAndLimitElements implements HistoryRepository {
     private static int NUMBER_OF_ELEMENTS = 10;
 
-    private Deque<Task> viewedTask;
+    private Deque<Task> viewedTaskList;
 
     public InMemoryHistoryRepositoryWithCopyAndLimitElements() {
-        this.viewedTask = new ArrayDeque<>();
+        this.viewedTaskList = new ArrayDeque<>();
     }
 
     @Override
-    public void add(Task task) {
-        viewedTask.offer(task);
-        if (viewedTask.size() > NUMBER_OF_ELEMENTS) {
-            viewedTask.pollFirst();
+    public void addToList(Task task) {
+        viewedTaskList.offer(task);
+        if (viewedTaskList.size() > NUMBER_OF_ELEMENTS) {
+            viewedTaskList.pollFirst();
         }
     }
 
     @Override
-    public List<Task> get() {
-        return new ArrayList<>(viewedTask);
+    public List<Task> listOfViewedTasks() {
+        return new ArrayList<>(viewedTaskList);
     }
 
     @Override
-    public void deleteFromHistory(int id) {
-        viewedTask.removeIf(task -> task.getId() == id);
+    public void deleteFromList(int id) {
+        viewedTaskList.removeIf(task -> task.getId() == id);
     }
 }

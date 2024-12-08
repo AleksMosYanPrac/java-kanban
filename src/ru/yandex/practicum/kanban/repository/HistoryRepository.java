@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface HistoryRepository {
 
-    void addToList(Task task);
+    void add(Task task);
 
-    void deleteFromList(int id);
+    void delete(int id);
 
-    List<Task> listOfViewedTasks();
+    List<Task> list();
 }

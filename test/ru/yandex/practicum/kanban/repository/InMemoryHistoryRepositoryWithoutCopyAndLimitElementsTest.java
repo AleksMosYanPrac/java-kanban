@@ -24,92 +24,92 @@ class InMemoryHistoryRepositoryWithoutCopyAndLimitElementsTest {
     }
 
     @Test
-    void canAddToListModelObjects() {
+    void canAddModelObjects() {
         for (Task task : tasks) {
-            historyRepository.addToList(task);
+            historyRepository.add(task);
         }
-        assertEquals(tasks, historyRepository.listOfViewedTasks());
+        assertEquals(tasks, historyRepository.list());
     }
 
     @Test
     void shouldDeleteTaskFromHistoryByIntegerId() {
-        int historySize = historyRepository.listOfViewedTasks().size();
+        int historySize = historyRepository.list().size();
         int taskId = 100;
         Task task = new Task(taskId, "task", "description", Status.NEW);
-        historyRepository.addToList(task);
+        historyRepository.add(task);
 
-        historyRepository.deleteFromList(taskId);
+        historyRepository.delete(taskId);
 
-        assertEquals(historySize, historyRepository.listOfViewedTasks().size());
-        assertFalse(historyRepository.listOfViewedTasks().contains(task));
+        assertEquals(historySize, historyRepository.list().size());
+        assertFalse(historyRepository.list().contains(task));
     }
 
     @Test
-    void canAddToListMoreThan10Elements() {
+    void canAddMoreThan10Elements() {
         List<Task> listOfAddedTask = new ArrayList<>();
 
         for (int i = 1; i < 100; i++) {
             Task task = new Task(i, "task", "description", Status.NEW);
             listOfAddedTask.add(task);
-            historyRepository.addToList(task);
+            historyRepository.add(task);
         }
-        assertEquals(listOfAddedTask, historyRepository.listOfViewedTasks());
+        assertEquals(listOfAddedTask, historyRepository.list());
     }
 
     @Test
     void shouldNotSaveRepeatedView() {
-        List<Task> listBeforeAdd = historyRepository.listOfViewedTasks();
+        List<Task> listBeforeAdd = historyRepository.list();
         int expectedSizeAfterAdd = 1;
 
-        historyRepository.addToList(TASK_1);
-        historyRepository.addToList(TASK_1);
+        historyRepository.add(TASK_1);
+        historyRepository.add(TASK_1);
 
         assertTrue(listBeforeAdd.isEmpty());
-        assertEquals(expectedSizeAfterAdd, historyRepository.listOfViewedTasks().size());
+        assertEquals(expectedSizeAfterAdd, historyRepository.list().size());
     }
 
     @Test
     void shouldSaveInRightOrderWhenLastAddedToLinkedListIsHead() {
         List<Task> rightOrder = List.of(TASK_2, SUBTASK_1, SUBTASK_2, EPIC_1, TASK_1);
 
-        historyRepository.addToList(TASK_1);
-        historyRepository.addToList(TASK_2);
-        historyRepository.addToList(SUBTASK_1);
-        historyRepository.addToList(SUBTASK_2);
-        historyRepository.addToList(EPIC_1);
-        historyRepository.addToList(TASK_1);
+        historyRepository.add(TASK_1);
+        historyRepository.add(TASK_2);
+        historyRepository.add(SUBTASK_1);
+        historyRepository.add(SUBTASK_2);
+        historyRepository.add(EPIC_1);
+        historyRepository.add(TASK_1);
 
-        assertEquals(rightOrder.size(), historyRepository.listOfViewedTasks().size());
-        assertEquals(rightOrder, historyRepository.listOfViewedTasks());
+        assertEquals(rightOrder.size(), historyRepository.list().size());
+        assertEquals(rightOrder, historyRepository.list());
     }
 
     @Test
     void shouldSaveInRightOrderWhenLastAddedToLinkedListIsTail() {
         List<Task> rightOrder = List.of(TASK_1, TASK_2, SUBTASK_1, SUBTASK_2, EPIC_1);
 
-        historyRepository.addToList(TASK_1);
-        historyRepository.addToList(TASK_2);
-        historyRepository.addToList(SUBTASK_1);
-        historyRepository.addToList(SUBTASK_2);
-        historyRepository.addToList(EPIC_1);
-        historyRepository.addToList(EPIC_1);
+        historyRepository.add(TASK_1);
+        historyRepository.add(TASK_2);
+        historyRepository.add(SUBTASK_1);
+        historyRepository.add(SUBTASK_2);
+        historyRepository.add(EPIC_1);
+        historyRepository.add(EPIC_1);
 
-        assertEquals(rightOrder.size(), historyRepository.listOfViewedTasks().size());
-        assertEquals(rightOrder, historyRepository.listOfViewedTasks());
+        assertEquals(rightOrder.size(), historyRepository.list().size());
+        assertEquals(rightOrder, historyRepository.list());
     }
 
     @Test
     void shouldSaveInRightOrderWhenLastAddedToLinkedListIsBetweenHeadAndTail() {
         List<Task> rightOrder = List.of(TASK_1, TASK_2, SUBTASK_2, EPIC_1, SUBTASK_1);
 
-        historyRepository.addToList(TASK_1);
-        historyRepository.addToList(TASK_2);
-        historyRepository.addToList(SUBTASK_1);
-        historyRepository.addToList(SUBTASK_2);
-        historyRepository.addToList(EPIC_1);
-        historyRepository.addToList(SUBTASK_1);
+        historyRepository.add(TASK_1);
+        historyRepository.add(TASK_2);
+        historyRepository.add(SUBTASK_1);
+        historyRepository.add(SUBTASK_2);
+        historyRepository.add(EPIC_1);
+        historyRepository.add(SUBTASK_1);
 
-        assertEquals(rightOrder.size(), historyRepository.listOfViewedTasks().size());
-        assertEquals(rightOrder, historyRepository.listOfViewedTasks());
+        assertEquals(rightOrder.size(), historyRepository.list().size());
+        assertEquals(rightOrder, historyRepository.list());
     }
 }

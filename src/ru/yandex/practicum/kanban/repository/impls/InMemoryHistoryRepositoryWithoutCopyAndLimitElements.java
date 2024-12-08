@@ -7,25 +7,25 @@ import java.util.*;
 
 public class InMemoryHistoryRepositoryWithoutCopyAndLimitElements implements HistoryRepository {
 
-    private MyLinkedList<Task> viewedTasksList;
+    private MyLinkedList<Task> viewedTasks;
 
     public InMemoryHistoryRepositoryWithoutCopyAndLimitElements() {
-        this.viewedTasksList = new MyLinkedList<>();
+        this.viewedTasks = new MyLinkedList<>();
     }
 
     @Override
-    public void addToList(Task task) {
-        viewedTasksList.add(task);
+    public void add(Task task) {
+        viewedTasks.add(task);
     }
 
     @Override
-    public List<Task> listOfViewedTasks() {
-        return viewedTasksList.toList();
+    public List<Task> list() {
+        return viewedTasks.toList();
     }
 
     @Override
-    public void deleteFromList(int id) {
-        viewedTasksList.removeNodeIfPresent(id);
+    public void delete(int id) {
+        viewedTasks.removeNodeIfPresent(id);
     }
 
     private static class MyLinkedList<E extends Task> {

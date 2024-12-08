@@ -67,6 +67,7 @@ public class TaskManagerImpl implements TaskManager {
     @Override
     public void deleteTask(TaskDTO task) {
         Task taskById = taskRepository.getById(task.getId()).orElseThrow();
+        historyManager.remove(taskById.getId());
         taskRepository.deleteById(taskById.getId());
     }
 
@@ -74,6 +75,7 @@ public class TaskManagerImpl implements TaskManager {
     public void deleteSubtask(TaskDTO subtask) {
         Subtask subtaskById = subtaskRepository.getById(subtask.getId()).orElseThrow();
         unlinkSubtaskFromEpic(subtaskById.getEpic(), subtaskById);
+        historyManager.remove(subtaskById.getId());
         subtaskRepository.deleteById(subtask.getId());
     }
 
@@ -82,8 +84,10 @@ public class TaskManagerImpl implements TaskManager {
         Epic epicById = epicRepository.getById(epic.getId()).orElseThrow();
         List<Subtask> subtasks = epicById.getSubtasks();
         for (Subtask subtask : subtasks) {
+            historyManager.remove(subtask.getId());
             subtaskRepository.deleteById(subtask.getId());
         }
+        historyManager.remove(epicById.getId());
         epicRepository.deleteById(epicById.getId());
     }
 
@@ -97,8 +101,7 @@ public class TaskManagerImpl implements TaskManager {
     @Override
     public void updateSubtask(TaskDTO subtask) {
         Subtask subtaskById = subtaskRepository.getById(subtask.getId()).orElseThrow();
-        Subtask updatedSubtask = new Subtask(
-                subtask.getId(), subtask.getTitle(), subtask.getDescription(), subtask.getStatus());
+        Subtask updatedSubtask = new Subtask(subtask.getId(), subtask.getTitle(), subtask.getDescription(), subtask.getStatus());
         if (Objects.nonNull(subtaskById.getEpic())) {
             Epic linkedEpic = epicRepository.getById(subtaskById.getEpic().getId()).orElseThrow();
             unlinkSubtaskFromEpic(linkedEpic, subtaskById);
@@ -140,6 +143,8 @@ public class TaskManagerImpl implements TaskManager {
     }
 
     private void unlinkSubtaskFromEpic(Epic epic, Subtask subtask) {
-        epic.deleteSubtask(subtask);
+        if (Objects.nonNull(epic)) {
+            epic.deleteSubtask(subtask);
+        }
     }
 }

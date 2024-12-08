@@ -8,6 +8,7 @@ public interface HistoryRepository {
 
     void add(Task task);
 
-    List<Task> get();
+    void delete(int id);
 
+    List<Task> list();
 }

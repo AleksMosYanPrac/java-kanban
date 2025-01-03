@@ -1,4 +1,4 @@
-package ru.yandex.practicum.kanban.repository.impls;
+package ru.yandex.practicum.kanban.repository.impls.in_memory;
 
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.repository.HistoryRepository;

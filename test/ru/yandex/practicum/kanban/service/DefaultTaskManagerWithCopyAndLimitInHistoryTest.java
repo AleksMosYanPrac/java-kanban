@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.kanban.model.*;
 import ru.yandex.practicum.kanban.repository.HistoryRepository;
 import ru.yandex.practicum.kanban.repository.Repository;
-import ru.yandex.practicum.kanban.repository.impls.InMemoryEpicRepositoryImpl;
-import ru.yandex.practicum.kanban.repository.impls.InMemoryHistoryRepositoryWithCopyAndLimitElements;
-import ru.yandex.practicum.kanban.repository.impls.InMemorySubtaskRepositoryImpl;
-import ru.yandex.practicum.kanban.repository.impls.InMemoryTaskRepositoryImpl;
+import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemoryEpicRepositoryImpl;
+import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemoryHistoryRepositoryWithCopyAndLimitElements;
+import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemorySubtaskRepositoryImpl;
+import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemoryTaskRepositoryImpl;
 import ru.yandex.practicum.kanban.service.util.Managers;
 
 import java.util.List;

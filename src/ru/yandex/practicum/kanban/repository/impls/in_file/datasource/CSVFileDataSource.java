@@ -1,7 +1,7 @@
 package ru.yandex.practicum.kanban.repository.impls.in_file.datasource;
 
-import ru.yandex.practicum.kanban.repository.impls.in_file.exceptions.InFileReadException;
-import ru.yandex.practicum.kanban.repository.impls.in_file.exceptions.InFileWriteException;
+import ru.yandex.practicum.kanban.repository.impls.in_file.exceptions.FileReadException;
+import ru.yandex.practicum.kanban.repository.impls.in_file.exceptions.FileWriteException;
 import ru.yandex.practicum.kanban.repository.impls.in_file.FileDataSource;
 
 import java.io.BufferedReader;
@@ -82,7 +82,7 @@ public class CSVFileDataSource implements FileDataSource {
                 lines.add(new Line(lineNumber));
             }
         } catch (IOException e) {
-            throw new InFileReadException("Can't read file:" + path, e);
+            throw new FileReadException("Can't read file:" + path, e);
         }
         return lines;
     }
@@ -94,7 +94,7 @@ public class CSVFileDataSource implements FileDataSource {
                 bw.newLine();
             }
         } catch (IOException e) {
-            throw new InFileWriteException("Can't write file" + path, e);
+            throw new FileWriteException("Can't write file" + path, e);
         }
     }
 

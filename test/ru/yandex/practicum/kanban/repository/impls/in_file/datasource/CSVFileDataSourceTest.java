@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import ru.yandex.practicum.kanban.model.Status;
 import ru.yandex.practicum.kanban.model.Task;
+import ru.yandex.practicum.kanban.repository.TestData;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,19 +29,11 @@ class CSVFileDataSourceTest {
     Path tempDir;
 
     @BeforeEach
-    void setUp() {
-        try {
-            pathToEmptyFile = tempDir.resolve("temp_file_1.csv");
-            pathToDataFile = tempDir.resolve("temp_file_2.csv");
-            Files.createFile(pathToEmptyFile);
-            Files.createFile(pathToDataFile);
-        } catch (InvalidPathException ipe) {
-            System.err.println(
-                    "error creating temporary file in " +
-                            this.getClass().getSimpleName());
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    void setUp() throws InvalidPathException, IOException {
+        pathToEmptyFile = tempDir.resolve("temp_file_1.csv");
+        pathToDataFile = tempDir.resolve("temp_file_2.csv");
+        Files.createFile(pathToEmptyFile);
+        Files.createFile(pathToDataFile);
     }
 
     @Test
@@ -55,9 +48,11 @@ class CSVFileDataSourceTest {
         List<String> linesFromFile = Files.readAllLines(pathToEmptyFile, StandardCharsets.UTF_8);
 
         assertTrue(isFileEmptyBeforeWriteData);
-        assertEquals(2, linesFromFile.size());
-        assertEquals(COLUMN_LABELS_LINE, linesFromFile.getFirst());
-        assertEquals(lineWithData, linesFromFile.getLast());
+        assertAll("File condition after write data",
+                () -> assertEquals(2, linesFromFile.size()),
+                () -> assertEquals(COLUMN_LABELS_LINE, linesFromFile.getFirst()),
+                () -> assertEquals(lineWithData, linesFromFile.getLast())
+        );
     }
 
     @Test
@@ -73,9 +68,11 @@ class CSVFileDataSourceTest {
         List<String> linesFromFile = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
 
         assertFalse(isFileContainsAnyData);
-        assertEquals(2, linesFromFile.size());
-        assertEquals(COLUMN_LABELS_LINE, linesFromFile.getFirst());
-        assertEquals(lineWithData, linesFromFile.getLast());
+        assertAll("File condition after write data",
+                () -> assertEquals(2, linesFromFile.size()),
+                () -> assertEquals(COLUMN_LABELS_LINE, linesFromFile.getFirst()),
+                () -> assertEquals(lineWithData, linesFromFile.getLast())
+        );
     }
 
     @Test
@@ -95,12 +92,16 @@ class CSVFileDataSourceTest {
         dataSource.overwrite(updatedData, typeQuery, idQuery);
         List<String> linesAfterOverwrite = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
 
-        assertEquals(2, linesBeforeOverwrite.size());
-        assertEquals(COLUMN_LABELS_LINE, linesBeforeOverwrite.getFirst());
-        assertEquals(lineWithTask, linesBeforeOverwrite.getLast());
-        assertEquals(2, linesAfterOverwrite.size());
-        assertEquals(COLUMN_LABELS_LINE, linesAfterOverwrite.getFirst());
-        assertEquals(lineWithUpdatedTask, linesAfterOverwrite.getLast());
+        assertAll("File condition before overwrite data",
+                () -> assertEquals(2, linesBeforeOverwrite.size()),
+                () -> assertEquals(COLUMN_LABELS_LINE, linesBeforeOverwrite.getFirst()),
+                () -> assertEquals(lineWithTask, linesBeforeOverwrite.getLast())
+        );
+        assertAll("File condition after overwrite data",
+                () -> assertEquals(2, linesAfterOverwrite.size()),
+                () -> assertEquals(COLUMN_LABELS_LINE, linesAfterOverwrite.getFirst()),
+                () -> assertEquals(lineWithUpdatedTask, linesAfterOverwrite.getLast())
+        );
     }
 
     @Test
@@ -117,11 +118,15 @@ class CSVFileDataSourceTest {
         dataSource.clear(typeQuery);
         List<String> linesAfterClear = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
 
-        assertEquals(3, linesBeforeClear.size());
-        assertEquals(COLUMN_LABELS_LINE, linesBeforeClear.getFirst());
-        assertEquals(lineWithTask_2, linesBeforeClear.getLast());
-        assertEquals(1, linesAfterClear.size());
-        assertEquals(COLUMN_LABELS_LINE, linesAfterClear.getFirst());
+        assertAll("File condition before clear data",
+                () -> assertEquals(3, linesBeforeClear.size()),
+                () -> assertEquals(COLUMN_LABELS_LINE, linesBeforeClear.getFirst()),
+                () -> assertEquals(lineWithTask_2, linesBeforeClear.getLast())
+        );
+        assertAll("File condition after clear data",
+                () -> assertEquals(1, linesAfterClear.size()),
+                () -> assertEquals(COLUMN_LABELS_LINE, linesAfterClear.getFirst())
+        );
     }
 
     @Test
@@ -136,9 +141,14 @@ class CSVFileDataSourceTest {
         List<String> linesFromFile = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
         List<DataSet> result = dataSource.read(typeQuery);
 
-        assertEquals(2, linesFromFile.size());
-        assertEquals(COLUMN_LABELS_LINE, linesFromFile.getFirst());
-        assertEquals(lineWithTask_1, linesFromFile.getLast());
-        assertEquals(1, result.size());
+        assertAll("File should contains data",
+                () -> assertEquals(2, linesFromFile.size()),
+                () -> assertEquals(COLUMN_LABELS_LINE, linesFromFile.getFirst()),
+                () -> assertEquals(lineWithTask_1, linesFromFile.getLast())
+        );
+        assertAll("Result should contain DataSet with required type",
+                () -> assertEquals(1, result.size()),
+                () -> assertEquals(dataSet.getString("TYPE"), result.getFirst().getString("TYPE"))
+        );
     }
 }

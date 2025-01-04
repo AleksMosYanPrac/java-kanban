@@ -27,18 +27,10 @@ class InFileTaskRepositoryWithCSVFileDataSourceTest {
     Path tempDir;
 
     @BeforeEach
-    void setUp() {
-        try {
-            pathToFile = tempDir.resolve("temp_file_1.csv");
-            Files.createFile(pathToFile);
-            this.taskRepository = new InFileTaskRepositoryImpl(new CSVFileDataSource(pathToFile));
-        } catch (InvalidPathException ipe) {
-            System.err.println(
-                    "error creating temporary temp_file_1.csv in " +
-                            this.getClass().getSimpleName());
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    void setUp() throws InvalidPathException, IOException {
+        pathToFile = tempDir.resolve("temp_file_1.csv");
+        Files.createFile(pathToFile);
+        this.taskRepository = new InFileTaskRepositoryImpl(new CSVFileDataSource(pathToFile));
     }
 
     @Test

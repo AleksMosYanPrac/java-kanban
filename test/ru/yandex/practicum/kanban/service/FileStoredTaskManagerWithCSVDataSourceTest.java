@@ -19,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.practicum.kanban.service.TestDataDTO.*;
 
-public class FileBackedTaskManagerWithCSVDataSourceTest {
+public class FileStoredTaskManagerWithCSVDataSourceTest {
 
     private TaskManager taskManager;
     private Path pathToFile;
@@ -27,18 +27,11 @@ public class FileBackedTaskManagerWithCSVDataSourceTest {
     Path tempDir;
 
     @BeforeEach
-    void setUp() {
-        try {
-            pathToFile = tempDir.resolve("temp_file_1.csv");
-            Files.createFile(pathToFile);
-            this.taskManager = Managers.fileBackedTaskManager(pathToFile);
-        } catch (InvalidPathException ipe) {
-            System.err.println(
-                    "error creating temporary temp_file_1.csv in " +
-                            this.getClass().getSimpleName());
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    void setUp() throws InvalidPathException, IOException {
+        pathToFile = tempDir.resolve("temp_file_1.csv");
+        Files.createFile(pathToFile);
+        this.taskManager = Managers.fileStoredTaskManager(pathToFile);
+
     }
 
     @Test
@@ -54,7 +47,7 @@ public class FileBackedTaskManagerWithCSVDataSourceTest {
         assertTrue(linesFromFile.contains(TestData.taskToCSVLine(task)));
         assertTrue(linesFromFile.contains(TestData.epicToCSVLine(epic)));
         assertTrue(linesFromFile.contains(TestData.subtaskToCSVLine(subtask)));
-        assertEquals(linesWithData+linesWithColumnLabels,linesFromFile.size());
+        assertEquals(linesWithData + linesWithColumnLabels, linesFromFile.size());
     }
 
     @Test
@@ -67,7 +60,7 @@ public class FileBackedTaskManagerWithCSVDataSourceTest {
 
         assertTrue(linesFromFile.contains(TestData.epicToCSVLine(epic)));
         assertTrue(linesFromFile.contains(TestData.subtaskToCSVLine(epic.getSubtasks().getFirst())));
-        assertEquals(linesWithData+linesWithColumnLabels,linesFromFile.size());
+        assertEquals(linesWithData + linesWithColumnLabels, linesFromFile.size());
     }
 
     @Test
@@ -76,12 +69,12 @@ public class FileBackedTaskManagerWithCSVDataSourceTest {
         int linesWithColumnLabels = 1;
         int linesWithData = 2;
 
-        List<String> linesBeforeDelete = Files.readAllLines(pathToFile,StandardCharsets.UTF_8);
+        List<String> linesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
         taskManager.deleteEpic(getWithID(addedEpic.getId()));
-        List<String> linesAfterDelete = Files.readAllLines(pathToFile,StandardCharsets.UTF_8);
+        List<String> linesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 
-        assertEquals(linesWithData+linesWithColumnLabels,linesBeforeDelete.size());
-        assertEquals(linesWithColumnLabels,linesAfterDelete.size());
+        assertEquals(linesWithData + linesWithColumnLabels, linesBeforeDelete.size());
+        assertEquals(linesWithColumnLabels, linesAfterDelete.size());
     }
 
     @Test
@@ -91,7 +84,7 @@ public class FileBackedTaskManagerWithCSVDataSourceTest {
 
         taskManager.deleteSubtask(getWithID(addedSubtask.getId()));
         Epic updatedEpic = taskManager.getEpicById(epic.getId());
-        List<String> linesAfterDelete = Files.readAllLines(pathToFile,StandardCharsets.UTF_8);
+        List<String> linesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 
         assertTrue(linesAfterDelete.contains(TestData.epicToCSVLine(updatedEpic)));
         assertFalse(linesAfterDelete.contains(TestData.subtaskToCSVLine(addedSubtask)));

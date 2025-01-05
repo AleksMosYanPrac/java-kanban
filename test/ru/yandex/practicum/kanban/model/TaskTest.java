@@ -3,6 +3,10 @@ package ru.yandex.practicum.kanban.model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
+
 public class TaskTest {
 
     @Test
@@ -30,5 +34,17 @@ public class TaskTest {
 
         Assertions.assertNotEquals(task1, task2);
         Assertions.assertNotEquals(task2, task1);
+    }
+
+    @Test
+    void shouldCalculateEndTime(){
+        LocalDateTime startTime = LocalDateTime.of(2025, Month.JANUARY,1,0,0);
+        long minutes = 60;
+        Duration duration = Duration.ofMinutes(minutes);
+        Task task = new Task(1,"task 1","task with time",Status.NEW,startTime,duration);
+
+        LocalDateTime endTime = task.getEndTime();
+
+        Assertions.assertEquals(startTime.plusMinutes(minutes),endTime);
     }
 }

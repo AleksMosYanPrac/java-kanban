@@ -54,7 +54,9 @@ public class TaskManagerImpl implements TaskManager {
         for (TaskDTO subtask : subtasks) {
             Subtask newSubtask = createSubtask(subtask);
             linkSubtaskWithEpic(newEpic, newSubtask);
+            subtaskRepository.update(newSubtask);
         }
+        epicRepository.update(newEpic);
         return newEpic;
     }
 
@@ -74,7 +76,11 @@ public class TaskManagerImpl implements TaskManager {
     @Override
     public void deleteSubtask(TaskDTO subtask) {
         Subtask subtaskById = subtaskRepository.getById(subtask.getId()).orElseThrow();
-        unlinkSubtaskFromEpic(subtaskById.getEpic(), subtaskById);
+        if (Objects.nonNull(subtaskById.getEpic())) {
+            Epic epic = subtaskById.getEpic();
+            unlinkSubtaskFromEpic(epic, subtaskById);
+            epicRepository.update(epic);
+        }
         historyManager.remove(subtaskById.getId());
         subtaskRepository.deleteById(subtask.getId());
     }
@@ -143,8 +149,6 @@ public class TaskManagerImpl implements TaskManager {
     }
 
     private void unlinkSubtaskFromEpic(Epic epic, Subtask subtask) {
-        if (Objects.nonNull(epic)) {
-            epic.deleteSubtask(subtask);
-        }
+        epic.deleteSubtask(subtask);
     }
 }

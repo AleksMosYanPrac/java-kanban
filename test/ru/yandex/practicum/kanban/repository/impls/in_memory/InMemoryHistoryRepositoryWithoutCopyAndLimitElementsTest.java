@@ -1,10 +1,10 @@
-package ru.yandex.practicum.kanban.repository;
+package ru.yandex.practicum.kanban.repository.impls.in_memory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.kanban.model.Status;
 import ru.yandex.practicum.kanban.model.Task;
-import ru.yandex.practicum.kanban.repository.impls.InMemoryHistoryRepositoryWithoutCopyAndLimitElements;
+import ru.yandex.practicum.kanban.repository.HistoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;

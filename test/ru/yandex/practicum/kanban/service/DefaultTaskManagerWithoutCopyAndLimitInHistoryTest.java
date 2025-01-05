@@ -8,7 +8,10 @@ import ru.yandex.practicum.kanban.model.Subtask;
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.repository.HistoryRepository;
 import ru.yandex.practicum.kanban.repository.Repository;
-import ru.yandex.practicum.kanban.repository.impls.*;
+import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemoryEpicRepositoryImpl;
+import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemoryHistoryRepositoryWithoutCopyAndLimitElements;
+import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemorySubtaskRepositoryImpl;
+import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemoryTaskRepositoryImpl;
 import ru.yandex.practicum.kanban.service.util.Managers;
 
 import java.util.List;

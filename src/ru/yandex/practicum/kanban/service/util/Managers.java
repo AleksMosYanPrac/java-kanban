@@ -55,7 +55,7 @@ public class Managers {
         return new TaskManagerImpl(taskRepository, epicRepository, subtaskRepository, historyManager);
     }
 
-    public static TaskManager fileBackedTaskManager(Path pathToFile){
+    public static TaskManager fileBackedTaskManager(Path pathToFile) {
         BackedRepository<Task> taskRepository = new InMemoryTaskRepositoryWithBackupData();
         BackedRepository<Epic> epicRepository = new InMemoryEpicRepositoryWithBackupData();
         BackedRepository<Subtask> subtaskRepository = new InMemorySubtaskRepositoryWithBackupData();
@@ -63,7 +63,7 @@ public class Managers {
         HistoryRepository historyRepository = createDefaultHistoryRepository();
         HistoryManager historyManager = new HistoryManagerImpl(historyRepository);
 
-        return new FileBackedTaskManager(taskRepository,epicRepository,subtaskRepository,historyManager,pathToFile);
+        return new FileBackedTaskManager(taskRepository, epicRepository, subtaskRepository, historyManager, pathToFile);
     }
 
     private static HistoryRepository createDefaultHistoryRepository() {

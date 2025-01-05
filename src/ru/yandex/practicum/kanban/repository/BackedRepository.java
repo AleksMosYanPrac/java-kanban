@@ -10,5 +10,6 @@ public interface BackedRepository<T extends Task> {
     Repository<T> getRepository();
 
     void readData(Path path) throws IOException;
+
     void saveData(Path path) throws IOException;
 }

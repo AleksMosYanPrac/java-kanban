@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import ru.yandex.practicum.kanban.model.Status;
 import ru.yandex.practicum.kanban.model.Task;
-import ru.yandex.practicum.kanban.repository.TestData;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.practicum.kanban.repository.TestData.*;
 
 class CSVFileDataSourceTest {
-    private final String COLUMN_LABELS_LINE = "id,type,title,status,description,epic,subtasks";
+    private final String COLUMN_LABELS_LINE = "id,type,title,status,description,start_time,duration,epic,subtasks";
 
     private Path pathToEmptyFile;
     private Path pathToDataFile;
@@ -39,13 +38,13 @@ class CSVFileDataSourceTest {
     @Test
     void canWriteDataSetAsCSVLineWithColumnLabelsToEmptyFile() throws IOException {
         DataSet dataSet = taskToDataSet(TASK_1);
-        String lineWithData = taskToCSVLine(TASK_1);
+        java.lang.String lineWithData = taskToCSVLine(TASK_1);
         DataQuery typeQuery = new DataQuery("TYPE", "TASK");
         this.dataSource = new CSVFileDataSource(pathToEmptyFile);
 
         boolean isFileEmptyBeforeWriteData = Files.readAllLines(pathToEmptyFile, StandardCharsets.UTF_8).isEmpty();
         dataSource.write(dataSet, typeQuery);
-        List<String> linesFromFile = Files.readAllLines(pathToEmptyFile, StandardCharsets.UTF_8);
+        List<java.lang.String> linesFromFile = Files.readAllLines(pathToEmptyFile, StandardCharsets.UTF_8);
 
         assertTrue(isFileEmptyBeforeWriteData);
         assertAll("File condition after write data",
@@ -58,14 +57,14 @@ class CSVFileDataSourceTest {
     @Test
     void canWriteDataSetAsCSVLineToDataFile() throws IOException {
         DataSet dataSet = taskToDataSet(TASK_1);
-        String lineWithData = taskToCSVLine(TASK_1);
+        java.lang.String lineWithData = taskToCSVLine(TASK_1);
         DataQuery taskQuery = new DataQuery("TYPE", "TASK");
         Files.writeString(pathToDataFile, COLUMN_LABELS_LINE);
         this.dataSource = new CSVFileDataSource(pathToDataFile);
 
         boolean isFileContainsAnyData = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8).isEmpty();
         dataSource.write(dataSet, taskQuery);
-        List<String> linesFromFile = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
+        List<java.lang.String> linesFromFile = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
 
         assertFalse(isFileContainsAnyData);
         assertAll("File condition after write data",
@@ -79,8 +78,8 @@ class CSVFileDataSourceTest {
     void canOverwriteCSVLineInDataFileByNewDataSet() throws IOException {
         Task task = new Task(1, "task", "description", Status.NEW);
         Task updatedTask = new Task(1, "task", "description", Status.IN_PROGRESS);
-        String lineWithTask = taskToCSVLine(task);
-        String lineWithUpdatedTask = taskToCSVLine(updatedTask);
+        java.lang.String lineWithTask = taskToCSVLine(task);
+        java.lang.String lineWithUpdatedTask = taskToCSVLine(updatedTask);
         DataSet updatedData = taskToDataSet(updatedTask);
         DataQuery typeQuery = new DataQuery("TYPE", "TASK");
         DataQuery idQuery = new DataQuery("ID", Integer.toString(updatedTask.getId()));
@@ -88,9 +87,9 @@ class CSVFileDataSourceTest {
         Files.writeString(pathToDataFile, lineWithTask, StandardOpenOption.APPEND);
         this.dataSource = new CSVFileDataSource(pathToDataFile);
 
-        List<String> linesBeforeOverwrite = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
+        List<java.lang.String> linesBeforeOverwrite = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
         dataSource.overwrite(updatedData, typeQuery, idQuery);
-        List<String> linesAfterOverwrite = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
+        List<java.lang.String> linesAfterOverwrite = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
 
         assertAll("File condition before overwrite data",
                 () -> assertEquals(2, linesBeforeOverwrite.size()),
@@ -107,16 +106,16 @@ class CSVFileDataSourceTest {
     @Test
     void canDeleteCSVLineInDataFileByQuery() throws IOException {
         DataQuery typeQuery = new DataQuery("TYPE", "TASK");
-        String lineWithTask_1 = taskToCSVLine(TASK_1);
-        String lineWithTask_2 = taskToCSVLine(TASK_2);
+        java.lang.String lineWithTask_1 = taskToCSVLine(TASK_1);
+        java.lang.String lineWithTask_2 = taskToCSVLine(TASK_2);
         Files.writeString(pathToDataFile, COLUMN_LABELS_LINE + "\n", StandardOpenOption.APPEND);
         Files.writeString(pathToDataFile, lineWithTask_1 + "\n", StandardOpenOption.APPEND);
         Files.writeString(pathToDataFile, lineWithTask_2 + "\n", StandardOpenOption.APPEND);
         this.dataSource = new CSVFileDataSource(pathToDataFile);
 
-        List<String> linesBeforeClear = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
+        List<java.lang.String> linesBeforeClear = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
         dataSource.clear(typeQuery);
-        List<String> linesAfterClear = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
+        List<java.lang.String> linesAfterClear = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
 
         assertAll("File condition before clear data",
                 () -> assertEquals(3, linesBeforeClear.size()),
@@ -132,13 +131,13 @@ class CSVFileDataSourceTest {
     @Test
     void canReadDataFromDataFileByQueryWithType() throws IOException {
         DataQuery typeQuery = new DataQuery("TYPE", "TASK");
-        String lineWithTask_1 = taskToCSVLine(TASK_1);
+        java.lang.String lineWithTask_1 = taskToCSVLine(TASK_1);
         DataSet dataSet = taskToDataSet(TASK_1);
         Files.writeString(pathToDataFile, COLUMN_LABELS_LINE + "\n", StandardOpenOption.APPEND);
         Files.writeString(pathToDataFile, lineWithTask_1 + "\n", StandardOpenOption.APPEND);
         this.dataSource = new CSVFileDataSource(pathToDataFile);
 
-        List<String> linesFromFile = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
+        List<java.lang.String> linesFromFile = Files.readAllLines(pathToDataFile, StandardCharsets.UTF_8);
         List<DataSet> result = dataSource.read(typeQuery);
 
         assertAll("File should contains data",

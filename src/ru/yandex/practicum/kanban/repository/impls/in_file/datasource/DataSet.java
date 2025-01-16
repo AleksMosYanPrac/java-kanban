@@ -23,6 +23,13 @@ public class DataSet {
         return new DataSetBuilder();
     }
 
+    public long getLong(String duration) {
+        if(this.data.getOrDefault(duration,"0").isBlank()){
+            return 0;
+        }
+        return Long.parseLong(this.data.getOrDefault(duration,"0"));
+    }
+
     public static class DataSetBuilder {
 
         private Map<String, String> data;

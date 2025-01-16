@@ -37,10 +37,10 @@ class InFileSubtaskRepositoryWithCSVFileDataSourceTest {
     @Test
     void shouldAppendSubtaskWithoutEpicToFileAsNewLastLine() throws IOException {
         Subtask subtask = SUBTASK_1;
-        String subtaskAsCSVLine = subtaskToCSVLine(subtask);
+        java.lang.String subtaskAsCSVLine = subtaskToCSVLine(subtask);
 
         subtaskRepository.create(subtask);
-        String lastLineInFile = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
+        java.lang.String lastLineInFile = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
 
         assertEquals(subtaskAsCSVLine, lastLineInFile);
     }
@@ -50,10 +50,10 @@ class InFileSubtaskRepositoryWithCSVFileDataSourceTest {
         Subtask subtask = SUBTASK_1;
         Epic epic = EPIC_1;
         subtask.addEpic(epic);
-        String subtaskAsCSVLine = subtaskToCSVLine(subtask);
+        java.lang.String subtaskAsCSVLine = subtaskToCSVLine(subtask);
 
         subtaskRepository.create(subtask);
-        String lastLineInFile = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
+        java.lang.String lastLineInFile = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
 
         assertEquals(subtaskAsCSVLine, lastLineInFile);
     }
@@ -61,14 +61,14 @@ class InFileSubtaskRepositoryWithCSVFileDataSourceTest {
     @Test
     void shouldOverwriteStringLineInFileForUpdatedSubtask() throws IOException {
         Subtask subtask = new Subtask(1, "subtask", "description", Status.NEW);
-        String subtaskAsCSVLine = subtaskToCSVLine(subtask);
+        java.lang.String subtaskAsCSVLine = subtaskToCSVLine(subtask);
         subtaskRepository.create(subtask);
         subtask = new Subtask(1, "subtask", "description", Status.IN_PROGRESS);
-        String updatedSubtaskAsCSVLine = subtaskToCSVLine(subtask);
+        java.lang.String updatedSubtaskAsCSVLine = subtaskToCSVLine(subtask);
 
-        String lineBeforeUpdate = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
+        java.lang.String lineBeforeUpdate = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
         subtaskRepository.update(subtask);
-        String lineAfterUpdate = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
+        java.lang.String lineAfterUpdate = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
 
         assertEquals(subtaskAsCSVLine, lineBeforeUpdate);
         assertEquals(updatedSubtaskAsCSVLine, lineAfterUpdate);
@@ -78,13 +78,13 @@ class InFileSubtaskRepositoryWithCSVFileDataSourceTest {
     void shouldDeleteAllSubtasksFromFile() throws IOException {
         Subtask subtask_1 = new Subtask(1, "subtask 1", "description", Status.NEW);
         Subtask subtask_2 = new Subtask(2, "subtask 2", "description", Status.NEW);
-        List<String> subtasksAsCSVLines = List.of(subtaskToCSVLine(subtask_1), subtaskToCSVLine(subtask_2));
+        List<java.lang.String> subtasksAsCSVLines = List.of(subtaskToCSVLine(subtask_1), subtaskToCSVLine(subtask_2));
         subtaskRepository.create(subtask_1);
         subtaskRepository.create(subtask_2);
 
-        List<String> fileLinesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
+        List<java.lang.String> fileLinesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
         subtaskRepository.deleteAll();
-        List<String> fileLinesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
+        List<java.lang.String> fileLinesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 
         assertTrue(fileLinesBeforeDelete.containsAll(subtasksAsCSVLines));
         assertFalse(fileLinesAfterDelete.containsAll(subtasksAsCSVLines));
@@ -94,13 +94,13 @@ class InFileSubtaskRepositoryWithCSVFileDataSourceTest {
     void shouldDeleteSubtaskByIntegerId() throws IOException {
         Subtask subtask_1 = new Subtask(1, "subtask 1", "description", Status.NEW);
         Subtask subtask_2 = new Subtask(2, "subtask 2", "description", Status.NEW);
-        List<String> subtasksAsCSVLines = List.of(subtaskToCSVLine(subtask_1), subtaskToCSVLine(subtask_2));
+        List<java.lang.String> subtasksAsCSVLines = List.of(subtaskToCSVLine(subtask_1), subtaskToCSVLine(subtask_2));
         subtaskRepository.create(subtask_1);
         subtaskRepository.create(subtask_2);
 
-        List<String> fileLinesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
+        List<java.lang.String> fileLinesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
         subtaskRepository.deleteById(1);
-        List<String> fileLinesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
+        List<java.lang.String> fileLinesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 
         assertTrue(fileLinesBeforeDelete.containsAll(subtasksAsCSVLines));
         assertTrue(fileLinesAfterDelete.contains(subtaskToCSVLine(subtask_2)));

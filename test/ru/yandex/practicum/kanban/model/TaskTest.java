@@ -41,7 +41,7 @@ public class TaskTest {
         LocalDateTime startTime = LocalDateTime.of(2025, Month.JANUARY,1,0,0);
         long minutes = 60;
         Duration duration = Duration.ofMinutes(minutes);
-        Task task = new Task(1,"task 1","task with time",Status.NEW,startTime,duration);
+        Task task = new Task(1,"task 1","task with time", Status.NEW,startTime,duration);
 
         LocalDateTime endTime = task.getEndTime();
 

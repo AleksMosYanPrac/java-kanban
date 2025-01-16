@@ -1,4 +1,4 @@
-package ru.yandex.practicum.kanban.service;
+package ru.yandex.practicum.kanban.service.managers;
 
 import ru.yandex.practicum.kanban.model.Epic;
 import ru.yandex.practicum.kanban.model.Subtask;
@@ -18,21 +18,19 @@ public interface TaskManager {
 
     List<Subtask> getSubtasksForEpic(TaskDTO epic);
 
-    void deleteTask(TaskDTO task);
+    Task deleteTask(TaskDTO task);
 
-    void deleteSubtask(TaskDTO subtask);
+    Subtask deleteSubtask(TaskDTO subtask);
 
-    void deleteEpic(TaskDTO epic);
+    Epic deleteEpic(TaskDTO epic);
 
-    void updateTask(TaskDTO task);
+    Task updateTask(TaskDTO task);
 
-    void updateSubtask(TaskDTO subtask);
+    Subtask updateSubtask(TaskDTO subtask);
 
     Task getTaskById(int id);
 
     Subtask getSubTaskById(int id);
 
     Epic getEpicById(int id);
-
-    List<Task> getHistoryOfViewedTasks();
 }

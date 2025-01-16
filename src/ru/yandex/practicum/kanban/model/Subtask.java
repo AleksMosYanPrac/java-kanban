@@ -2,7 +2,8 @@ package ru.yandex.practicum.kanban.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Subtask extends Task {
@@ -31,14 +32,18 @@ public class Subtask extends Task {
         return this.epic;
     }
 
+    public boolean hasEpic() {
+        return Objects.nonNull(epic);
+    }
+
     @Override
     public String toString() {
-        String epicId = "null";
+        java.lang.String epicId = "null";
         if (Objects.nonNull(epic)) {
             epicId = String.valueOf(epic.getId());
         }
         if (Objects.nonNull(startTime) && Objects.nonNull(duration)) {
-            String dateTime = startTime.format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy"));
+            java.lang.String dateTime = startTime.format(Task.DATE_TIME_FORMATTER);
             long durationInMinutes = duration.toMinutes();
             return "Subtask{" +
                     "id=" + id +

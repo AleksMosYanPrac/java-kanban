@@ -1,12 +1,12 @@
-package ru.yandex.practicum.kanban.service;
+package ru.yandex.practicum.kanban.service.services;
 
 import ru.yandex.practicum.kanban.model.Task;
 
 import java.util.List;
 
-public interface HistoryManager {
+public interface HistoryService {
 
-    void add(Task task);
+    Task add(Task task);
 
     void remove(int id);
 

@@ -101,7 +101,7 @@ public class CSVFileDataSource implements FileDataSource {
     private static class Line {
 
         private final String delimiter = ",";
-        private final List<String> columnLabels = List.of("id", "type", "title", "status", "description", "epic", "subtasks");
+        private final List<String> columnLabels = List.of("id", "type", "title", "status", "description","start_time","duration", "epic", "subtasks");
         private int lineNumber;
         private Map<String, String> data;
 

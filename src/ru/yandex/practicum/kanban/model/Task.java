@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
+    public static final String DATE_TIME_PATTERN = "HH:mm dd.MM.yyyy";
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 
     protected final int id;
     protected String title;
@@ -58,6 +60,10 @@ public class Task {
         return startTime.plusMinutes(duration.toMinutes());
     }
 
+    public boolean hasStartTimeAndDuration() {
+        return Objects.nonNull(startTime) && Objects.nonNull(duration);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,7 +80,7 @@ public class Task {
     @Override
     public String toString() {
         if (Objects.nonNull(startTime) && Objects.nonNull(duration)) {
-            String dateTime = startTime.format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy"));
+            String dateTime = startTime.format(DATE_TIME_FORMATTER);
             long durationInMinutes = duration.toMinutes();
             return "Task{" +
                     "id=" + id +
@@ -91,5 +97,9 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public static TaskBuilder builder() {
+        return new TaskBuilder();
     }
 }

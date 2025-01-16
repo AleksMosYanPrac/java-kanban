@@ -1,9 +1,6 @@
 package ru.yandex.practicum.kanban.repository;
 
-import ru.yandex.practicum.kanban.model.Epic;
-import ru.yandex.practicum.kanban.model.Status;
-import ru.yandex.practicum.kanban.model.Subtask;
-import ru.yandex.practicum.kanban.model.Task;
+import ru.yandex.practicum.kanban.model.*;
 import ru.yandex.practicum.kanban.repository.impls.in_file.datasource.DataSet;
 
 import java.util.ArrayList;
@@ -34,6 +31,8 @@ public class TestData {
                 .add("title", task.getTitle())
                 .add("description", task.getDescription())
                 .add("status", task.getStatus().toString())
+                .add("start_time", getStringStartTime(task))
+                .add("duration", getStringDuration(task))
                 .build();
     }
 
@@ -53,47 +52,37 @@ public class TestData {
                 .add("title", epic.getTitle())
                 .add("description", epic.getDescription())
                 .add("status", epic.getStatus().toString())
+                .add("start_time", getStringStartTime(epic))
+                .add("duration", getStringDuration(epic))
                 .add("subtasks", idOfSubtasks.toString())
                 .build();
     }
 
     public static String taskToCSVLine(Task task) {
-        return String.format("%s,TASK,%s,%s,%s,,",
-                task.getId(),
-                task.getTitle(),
-                task.getStatus().toString(),
-                task.getDescription());
+        return TaskBuilder.CSVParser.taskToCSVLine(task);
     }
 
     public static String epicToCSVLine(Epic epic) {
-        StringBuilder idOfSubtasks = new StringBuilder();
-        List<Subtask> subtasks = epic.getSubtasks();
-        idOfSubtasks.append("[");
-        for (Subtask subtask : subtasks) {
-            idOfSubtasks.append(subtask.getId());
-            if (subtasks.indexOf(subtask) < subtasks.size() - 1) {
-                idOfSubtasks.append(",");
-            }
-        }
-        idOfSubtasks.append("]");
-        return String.format("%s,EPIC,%s,%s,%s,,%s",
-                epic.getId(),
-                epic.getTitle(),
-                epic.getStatus().toString(),
-                epic.getDescription(),
-                idOfSubtasks.toString());
+        return TaskBuilder.CSVParser.epicToCSVLine(epic);
     }
 
     public static String subtaskToCSVLine(Subtask subtask) {
-        String epicId = "";
-        if (Objects.nonNull(subtask.getEpic())) {
-            epicId = Integer.toString(subtask.getEpic().getId());
+        return TaskBuilder.CSVParser.subtaskToCSVLine(subtask);
+    }
+
+    private static String getStringStartTime(Task task) {
+        String starTime = "";
+        if (task.hasStartTimeAndDuration()) {
+            starTime = task.getStartTime().format(Task.DATE_TIME_FORMATTER);
         }
-        return String.format("%s,SUBTASK,%s,%s,%s,%s,",
-                subtask.getId(),
-                subtask.getTitle(),
-                subtask.getStatus().toString(),
-                subtask.getDescription(),
-                epicId);
+        return starTime;
+    }
+
+    private static String getStringDuration(Task task) {
+        String duration = "";
+        if (task.hasStartTimeAndDuration()) {
+            duration = Long.toString(task.getDuration().toMinutes());
+        }
+        return duration;
     }
 }

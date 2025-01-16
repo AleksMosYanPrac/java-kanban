@@ -5,20 +5,20 @@ public class TaskDTO {
     private int id;
     private String title;
     private String description;
-    private Status status;
+    private String status;
     private String startTime;
     private long durationInMinutes;
 
     public TaskDTO() {
     }
 
-    public TaskDTO(String title, String description, Status status) {
+    public TaskDTO(String title, String description, String status) {
         this.title = title;
         this.description = description;
         this.status = status;
     }
 
-    public TaskDTO(String title, String description, Status status, String startTime, long durationInMinutes) {
+    public TaskDTO(String title, String description, String status, String startTime, long durationInMinutes) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -26,14 +26,14 @@ public class TaskDTO {
         this.durationInMinutes = durationInMinutes;
     }
 
-    public TaskDTO(int id, String title, String description, Status status) {
+    public TaskDTO(int id, String title, String description, String status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
     }
 
-    public TaskDTO(int id, String title, String description, Status status, String startTime, long durationInMinutes) {
+    public TaskDTO(int id, String title, String description, String status, String startTime, long durationInMinutes) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -66,11 +66,11 @@ public class TaskDTO {
         this.description = description;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

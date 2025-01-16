@@ -1,8 +1,6 @@
 package ru.yandex.practicum.kanban.repository.impls.in_file;
 
-import ru.yandex.practicum.kanban.model.Epic;
-import ru.yandex.practicum.kanban.model.Status;
-import ru.yandex.practicum.kanban.model.Subtask;
+import ru.yandex.practicum.kanban.model.*;
 import ru.yandex.practicum.kanban.repository.Repository;
 import ru.yandex.practicum.kanban.repository.impls.in_file.datasource.DataQuery;
 import ru.yandex.practicum.kanban.repository.impls.in_file.datasource.DataSet;
@@ -24,7 +22,7 @@ public class InFileSubtaskRepositoryImpl implements Repository<Subtask> {
     public List<Subtask> getAll() {
         List<Subtask> result = new ArrayList<>();
         for (DataSet dataSet : source.read(new DataQuery("TYPE", "SUBTASK"))) {
-            String epicId = dataSet.getString("epic");
+            java.lang.String epicId = dataSet.getString("epic");
             if (epicId.isBlank()) {
                 result.add(fromDataSet(dataSet));
             } else {
@@ -50,7 +48,7 @@ public class InFileSubtaskRepositoryImpl implements Repository<Subtask> {
             return Optional.empty();
         } else {
             DataSet dataSet = result.getFirst();
-            String epicId = dataSet.getString("epic");
+            java.lang.String epicId = dataSet.getString("epic");
             if (epicId.isBlank()) {
                 return Optional.of(fromDataSet(dataSet));
             } else {
@@ -82,21 +80,28 @@ public class InFileSubtaskRepositoryImpl implements Repository<Subtask> {
 
     private Subtask fromDataSet(DataSet subtaskDataSet, DataSet epicDataSet) {
         Subtask subtask = fromDataSet(subtaskDataSet);
-        Epic epic = new Epic(epicDataSet.getInt("id"),
+        TaskDTO taskDTO = new TaskDTO(epicDataSet.getInt("id"),
                 epicDataSet.getString("title"),
                 epicDataSet.getString("description"),
-                Status.valueOf(epicDataSet.getString("status")
-                ));
+                epicDataSet.getString("status"),
+                epicDataSet.getString("start_time"),
+                epicDataSet.getLong("duration")
+        );
+        Epic epic =  new TaskBuilder().setId(taskDTO.getId()).setData(taskDTO).buildEpic();
         subtask.addEpic(epic);
         epic.addSubtask(subtask);
         return subtask;
     }
 
     private Subtask fromDataSet(DataSet dataSet) {
-        return new Subtask(dataSet.getInt("id"),
+        TaskDTO taskDTO = new TaskDTO(dataSet.getInt("id"),
                 dataSet.getString("title"),
                 dataSet.getString("description"),
-                Status.valueOf(dataSet.getString("status")));
+                dataSet.getString("status"),
+                dataSet.getString("start_time"),
+                dataSet.getLong("duration")
+        );
+        return new TaskBuilder().setId(taskDTO.getId()).setData(taskDTO).buildSubtask();
     }
 
     private DataSet toDataSet(Subtask subtask) {
@@ -109,7 +114,24 @@ public class InFileSubtaskRepositoryImpl implements Repository<Subtask> {
                 .add("title", subtask.getTitle())
                 .add("description", subtask.getDescription())
                 .add("status", subtask.getStatus().toString())
+                .add("start_time", getStringStartTime(subtask))
+                .add("duration", getStringDuration(subtask))
                 .add("epic", epicId)
                 .build();
+    }
+    private String getStringStartTime(Subtask subtask) {
+        String starTime = "";
+        if (subtask.hasStartTimeAndDuration()) {
+            starTime = subtask.getStartTime().format(Task.DATE_TIME_FORMATTER);
+        }
+        return starTime;
+    }
+
+    private String getStringDuration(Subtask subtask) {
+        String duration = "";
+        if (subtask.hasStartTimeAndDuration()) {
+            duration = Long.toString(subtask.getDuration().toMinutes());
+        }
+        return duration;
     }
 }

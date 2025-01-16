@@ -1,21 +1,23 @@
-package ru.yandex.practicum.kanban.service;
+package ru.yandex.practicum.kanban.service.services.impls;
 
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.repository.HistoryRepository;
+import ru.yandex.practicum.kanban.service.services.HistoryService;
 
 import java.util.List;
 
-public class HistoryManagerImpl implements HistoryManager {
+public class HistoryServiceImpl implements HistoryService {
 
     private final HistoryRepository historyRepository;
 
-    public HistoryManagerImpl(HistoryRepository historyRepository) {
+    public HistoryServiceImpl(HistoryRepository historyRepository) {
         this.historyRepository = historyRepository;
     }
 
     @Override
-    public void add(Task task) {
+    public Task add(Task task) {
         historyRepository.add(task);
+        return task;
     }
 
     @Override

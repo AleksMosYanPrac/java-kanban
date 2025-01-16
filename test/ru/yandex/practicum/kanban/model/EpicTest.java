@@ -97,7 +97,7 @@ public class EpicTest {
         LocalDateTime startTime = LocalDateTime.of(2025, Month.JANUARY, 1, 0, 0);
         long minutes = 60;
         Duration duration = Duration.ofMinutes(minutes);
-        Subtask subtask = new Subtask(2,"Subtask","Subtask without time",Status.NEW);
+        Subtask subtask = new Subtask(2,"Subtask","Subtask without time", Status.NEW);
         Epic epic = new Epic(1, "epic 1", "epic with time", Status.NEW, startTime, duration);
         epic.addSubtask(subtask);
 
@@ -115,7 +115,7 @@ public class EpicTest {
         LocalDateTime startTime = LocalDateTime.of(2025, Month.JANUARY, 1, 0, 0);
         long minutes = 60;
         Duration duration = Duration.ofMinutes(minutes);
-        Subtask subtask = new Subtask(2,"Subtask","Subtask with time",Status.NEW,startTime,duration);
+        Subtask subtask = new Subtask(2,"Subtask","Subtask with time", Status.NEW,startTime,duration);
         Epic epic = new Epic(1, "epic 1", "epic without time", Status.NEW);
         epic.addSubtask(subtask);
 
@@ -135,8 +135,8 @@ public class EpicTest {
         long minutes = 60;
         Duration duration = Duration.ofMinutes(minutes);
         Epic epic = new Epic(1, "epic 1", "epic without time", Status.NEW);
-        Subtask subtask_1 = new Subtask(2,"Subtask","With time",Status.NEW,startTime_1,duration);
-        Subtask subtask_2 = new Subtask(3,"Subtask","With time",Status.NEW,startTime_2,duration);
+        Subtask subtask_1 = new Subtask(2,"Subtask","With time", Status.NEW,startTime_1,duration);
+        Subtask subtask_2 = new Subtask(3,"Subtask","With time", Status.NEW,startTime_2,duration);
         epic.addSubtask(subtask_1);
         epic.addSubtask(subtask_2);
 

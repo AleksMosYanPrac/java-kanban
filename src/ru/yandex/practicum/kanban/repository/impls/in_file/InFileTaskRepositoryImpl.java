@@ -1,7 +1,6 @@
 package ru.yandex.practicum.kanban.repository.impls.in_file;
 
-import ru.yandex.practicum.kanban.model.Status;
-import ru.yandex.practicum.kanban.model.Task;
+import ru.yandex.practicum.kanban.model.*;
 import ru.yandex.practicum.kanban.repository.Repository;
 import ru.yandex.practicum.kanban.repository.impls.in_file.datasource.DataQuery;
 import ru.yandex.practicum.kanban.repository.impls.in_file.datasource.DataSet;
@@ -66,10 +65,14 @@ public class InFileTaskRepositoryImpl implements Repository<Task> {
     }
 
     private Task fromDataSet(DataSet dataSet) {
-        return new Task(dataSet.getInt("id"),
+        TaskDTO taskDTO = new TaskDTO(dataSet.getInt("id"),
                 dataSet.getString("title"),
                 dataSet.getString("description"),
-                Status.valueOf(dataSet.getString("status")));
+                dataSet.getString("status"),
+                dataSet.getString("start_time"),
+                dataSet.getLong("duration")
+        );
+        return new TaskBuilder().setId(taskDTO.getId()).setData(taskDTO).buildTask();
     }
 
     private DataSet toDataSet(Task task) {
@@ -78,6 +81,23 @@ public class InFileTaskRepositoryImpl implements Repository<Task> {
                 .add("title", task.getTitle())
                 .add("description", task.getDescription())
                 .add("status", task.getStatus().toString())
+                .add("start_time", getStringStartTime(task))
+                .add("duration", getStringDuration(task))
                 .build();
+    }
+    private String getStringStartTime(Task task) {
+        String starTime = "";
+        if (task.hasStartTimeAndDuration()) {
+            starTime = task.getStartTime().format(Task.DATE_TIME_FORMATTER);
+        }
+        return starTime;
+    }
+
+    private String getStringDuration(Task task) {
+        String duration = "";
+        if (task.hasStartTimeAndDuration()) {
+            duration = Long.toString(task.getDuration().toMinutes());
+        }
+        return duration;
     }
 }

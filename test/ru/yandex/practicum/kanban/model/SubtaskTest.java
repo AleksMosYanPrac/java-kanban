@@ -41,7 +41,7 @@ public class SubtaskTest {
         LocalDateTime startTime = LocalDateTime.of(2025, Month.JANUARY,1,0,0);
         long minutes = 60;
         Duration duration = Duration.ofMinutes(minutes);
-        Subtask subtask = new Subtask(1,"sub 1","subtask with time",Status.NEW,startTime,duration);
+        Subtask subtask = new Subtask(1,"sub 1","subtask with time", Status.NEW,startTime,duration);
 
         LocalDateTime endTime = subtask.getEndTime();
 

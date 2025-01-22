@@ -4,7 +4,7 @@ import ru.yandex.practicum.kanban.model.Task;
 
 import java.util.Set;
 
-public interface PriorityManager extends TaskManager{
+public interface PriorityManager extends TaskManager {
 
     Set<Task> getPrioritizedTasks();
 }

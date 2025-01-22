@@ -24,10 +24,10 @@ public class DataSet {
     }
 
     public long getLong(String duration) {
-        if(this.data.getOrDefault(duration,"0").isBlank()){
+        if (this.data.getOrDefault(duration, "0").isBlank()) {
             return 0;
         }
-        return Long.parseLong(this.data.getOrDefault(duration,"0"));
+        return Long.parseLong(this.data.getOrDefault(duration, "0"));
     }
 
     public static class DataSetBuilder {

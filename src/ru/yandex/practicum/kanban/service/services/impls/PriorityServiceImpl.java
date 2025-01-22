@@ -6,12 +6,11 @@ import ru.yandex.practicum.kanban.service.services.PriorityService;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
 public class PriorityServiceImpl implements PriorityService {
 
-    private final Set<Task> prioritizedTaskSet;
+    private final TreeSet<Task> prioritizedTaskSet;
 
     public PriorityServiceImpl() {
         this.prioritizedTaskSet = new TreeSet<>(new StartTimeComparator());
@@ -44,8 +43,8 @@ public class PriorityServiceImpl implements PriorityService {
     }
 
     @Override
-    public Set<Task> sortByStarTime() {
-        return Set.copyOf(prioritizedTaskSet);
+    public TreeSet<Task> sortByStarTime() {
+        return new TreeSet<>(prioritizedTaskSet);
     }
 
     @Override

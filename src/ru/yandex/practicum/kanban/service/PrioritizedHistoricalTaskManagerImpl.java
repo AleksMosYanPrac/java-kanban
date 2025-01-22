@@ -11,7 +11,7 @@ import ru.yandex.practicum.kanban.service.services.PriorityService;
 import ru.yandex.practicum.kanban.service.services.RepositoryService;
 import ru.yandex.practicum.kanban.service.services.TaskService;
 
-import java.util.Set;
+import java.util.TreeSet;
 
 public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskManagerImpl implements PriorityManager {
 
@@ -118,7 +118,7 @@ public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskMa
     }
 
     @Override
-    public Set<Task> getPrioritizedTasks() {
+    public TreeSet<Task> getPrioritizedTasks() {
         return priorityService.sortByStarTime();
     }
 }

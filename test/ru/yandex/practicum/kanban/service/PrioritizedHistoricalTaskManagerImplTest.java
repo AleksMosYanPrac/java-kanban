@@ -11,6 +11,8 @@ import ru.yandex.practicum.kanban.service.managers.PriorityManagerTest;
 import ru.yandex.practicum.kanban.service.services.PriorityService;
 import ru.yandex.practicum.kanban.service.services.impls.PriorityServiceImpl;
 
+import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,8 +71,8 @@ class PrioritizedHistoricalTaskManagerImplTest
         priorityManager.createTask(getDatedTask());
         priorityManager.createSubtask(getDatedSubtask());
 
-        TreeSet<Task> sortedSet = (TreeSet<Task>) priorityManager.getPrioritizedTasks();
+        TreeSet<Task> prioritizedTasks = priorityManager.getPrioritizedTasks();
 
-        assertTrue(sortedSet.first().getStartTime().isBefore(sortedSet.last().getStartTime()));
+        assertTrue(prioritizedTasks.first().getStartTime().isBefore(prioritizedTasks.last().getStartTime()));
     }
 }

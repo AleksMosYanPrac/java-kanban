@@ -2,7 +2,7 @@ package ru.yandex.practicum.kanban.service.services;
 
 import ru.yandex.practicum.kanban.model.Task;
 
-import java.util.Set;
+import java.util.TreeSet;
 
 public interface PriorityService {
 
@@ -10,7 +10,7 @@ public interface PriorityService {
 
     boolean hasTimeIntersection(Task task);
 
-    Set<Task> sortByStarTime();
+    TreeSet<Task> sortByStarTime();
 
     void update(Task updatedTask);
 

@@ -87,7 +87,7 @@ public class InFileSubtaskRepositoryImpl implements Repository<Subtask> {
                 epicDataSet.getString("start_time"),
                 epicDataSet.getLong("duration")
         );
-        Epic epic =  new TaskBuilder().setId(taskDTO.getId()).setData(taskDTO).buildEpic();
+        Epic epic = new TaskBuilder().setId(taskDTO.getId()).setData(taskDTO).buildEpic();
         subtask.addEpic(epic);
         epic.addSubtask(subtask);
         return subtask;
@@ -119,6 +119,7 @@ public class InFileSubtaskRepositoryImpl implements Repository<Subtask> {
                 .add("epic", epicId)
                 .build();
     }
+
     private String getStringStartTime(Subtask subtask) {
         String starTime = "";
         if (subtask.hasStartTimeAndDuration()) {

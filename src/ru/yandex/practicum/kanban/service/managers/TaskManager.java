@@ -8,6 +8,7 @@ import ru.yandex.practicum.kanban.model.TaskDTO;
 import java.util.List;
 
 public interface TaskManager {
+
     Task createTask(TaskDTO task);
 
     Subtask createSubtask(TaskDTO subtask);

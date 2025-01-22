@@ -6,6 +6,7 @@ import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.model.TaskDTO;
 
 public interface TaskService {
+
     Task createTask(TaskDTO task);
 
     Subtask createSubtask(TaskDTO subtask);

@@ -5,6 +5,7 @@ import ru.yandex.practicum.kanban.model.Task;
 import java.util.Set;
 
 public interface PriorityService {
+
     Task add(Task task);
 
     boolean hasTimeIntersection(Task task);

@@ -8,6 +8,7 @@ import ru.yandex.practicum.kanban.service.services.TaskService;
 import ru.yandex.practicum.kanban.service.util.IdGenerator;
 
 public class TaskServiceImpl implements TaskService {
+
     @Override
     public Task createTask(TaskDTO task) {
         int id = IdGenerator.generate();

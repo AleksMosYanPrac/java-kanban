@@ -85,6 +85,7 @@ public class InFileTaskRepositoryImpl implements Repository<Task> {
                 .add("duration", getStringDuration(task))
                 .build();
     }
+
     private String getStringStartTime(Task task) {
         String starTime = "";
         if (task.hasStartTimeAndDuration()) {

@@ -36,10 +36,10 @@ class InFileTaskRepositoryWithCSVFileDataSourceTest {
     @Test
     void shouldAppendTaskToFileAsNewLastLine() throws IOException {
         Task task = TASK_1;
-        java.lang.String taskAsCSVLine = taskToCSVLine(task);
+        String taskAsCSVLine = taskToCSVLine(task);
 
         taskRepository.create(task);
-        java.lang.String lastLineInFile = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
+        String lastLineInFile = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
 
         assertEquals(taskAsCSVLine, lastLineInFile);
     }
@@ -47,14 +47,14 @@ class InFileTaskRepositoryWithCSVFileDataSourceTest {
     @Test
     void shouldOverwriteStringLineInFileForUpdatedTask() throws IOException {
         Task task = new Task(1, "task", "description", Status.NEW);
-        java.lang.String taskAsCSVLine = taskToCSVLine(task);
+        String taskAsCSVLine = taskToCSVLine(task);
         taskRepository.create(task);
         task = new Task(1, "task", "description", Status.IN_PROGRESS);
-        java.lang.String updatedTaskAsCSVLine = taskToCSVLine(task);
+        String updatedTaskAsCSVLine = taskToCSVLine(task);
 
-        java.lang.String lineBeforeUpdate = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
+        String lineBeforeUpdate = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
         taskRepository.update(task);
-        java.lang.String lineAfterUpdate = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
+        String lineAfterUpdate = Files.readAllLines(pathToFile, StandardCharsets.UTF_8).getLast();
 
         assertEquals(taskAsCSVLine, lineBeforeUpdate);
         assertEquals(updatedTaskAsCSVLine, lineAfterUpdate);
@@ -64,13 +64,13 @@ class InFileTaskRepositoryWithCSVFileDataSourceTest {
     void shouldDeleteAllTasksFromFile() throws IOException {
         Task task_1 = new Task(1, "task 1", "description", Status.NEW);
         Task task_2 = new Task(2, "task 2", "description", Status.NEW);
-        List<java.lang.String> tasksAsCSVLines = List.of(taskToCSVLine(task_1), taskToCSVLine(task_2));
+        List<String> tasksAsCSVLines = List.of(taskToCSVLine(task_1), taskToCSVLine(task_2));
         taskRepository.create(task_1);
         taskRepository.create(task_2);
 
-        List<java.lang.String> fileLinesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
+        List<String> fileLinesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
         taskRepository.deleteAll();
-        List<java.lang.String> fileLinesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
+        List<String> fileLinesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 
         assertTrue(fileLinesBeforeDelete.containsAll(tasksAsCSVLines));
         assertFalse(fileLinesAfterDelete.containsAll(tasksAsCSVLines));
@@ -80,13 +80,13 @@ class InFileTaskRepositoryWithCSVFileDataSourceTest {
     void shouldDeleteTaskByIntegerId() throws IOException {
         Task task_1 = new Task(1, "task 1", "description", Status.NEW);
         Task task_2 = new Task(2, "task 2", "description", Status.NEW);
-        List<java.lang.String> tasksAsCSVLines = List.of(taskToCSVLine(task_1), taskToCSVLine(task_2));
+        List<String> tasksAsCSVLines = List.of(taskToCSVLine(task_1), taskToCSVLine(task_2));
         taskRepository.create(task_1);
         taskRepository.create(task_2);
 
-        List<java.lang.String> fileLinesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
+        List<String> fileLinesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
         taskRepository.deleteById(1);
-        List<java.lang.String> fileLinesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
+        List<String> fileLinesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 
         assertTrue(fileLinesBeforeDelete.containsAll(tasksAsCSVLines));
         assertTrue(fileLinesAfterDelete.contains(taskToCSVLine(task_2)));

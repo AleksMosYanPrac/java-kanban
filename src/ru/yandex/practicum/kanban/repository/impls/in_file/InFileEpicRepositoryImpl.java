@@ -21,7 +21,7 @@ public class InFileEpicRepositoryImpl implements Repository<Epic> {
     public List<Epic> getAll() {
         List<Epic> result = new ArrayList<>();
         for (DataSet dataSet : source.read(new DataQuery("TYPE", "EPIC"))) {
-            java.lang.String idOfSubtasks = dataSet.getString("subtasks");
+            String idOfSubtasks = dataSet.getString("subtasks");
             if (idOfSubtasks.isBlank()) {
                 result.add(fromDataSet(dataSet));
             } else {
@@ -141,9 +141,9 @@ public class InFileEpicRepositoryImpl implements Repository<Epic> {
     private List<Integer> listIntegerId(String idOfSubtasks) {
         List<Integer> integerList = new ArrayList<>();
         if (idOfSubtasks.length() > 2) {
-            java.lang.String substring = idOfSubtasks.substring(1, idOfSubtasks.length() - 1);
-            java.lang.String[] idArray = substring.split(",");
-            for (java.lang.String id : idArray) {
+            String substring = idOfSubtasks.substring(1, idOfSubtasks.length() - 1);
+            String[] idArray = substring.split(",");
+            for (String id : idArray) {
                 integerList.add(Integer.valueOf(id));
             }
         }

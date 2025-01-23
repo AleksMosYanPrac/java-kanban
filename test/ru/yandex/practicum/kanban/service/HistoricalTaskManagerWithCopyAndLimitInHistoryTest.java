@@ -11,7 +11,6 @@ import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemoryHistoryRepo
 import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemorySubtaskRepositoryImpl;
 import ru.yandex.practicum.kanban.repository.impls.in_memory.InMemoryTaskRepositoryImpl;
 import ru.yandex.practicum.kanban.service.managers.HistoryManager;
-import ru.yandex.practicum.kanban.service.managers.HistoryManagerTest;
 import ru.yandex.practicum.kanban.service.managers.TaskManagerTest;
 import ru.yandex.practicum.kanban.service.services.HistoryService;
 import ru.yandex.practicum.kanban.service.services.RepositoryService;
@@ -27,7 +26,7 @@ import static ru.yandex.practicum.kanban.service.TestDataDTO.*;
 
 class HistoricalTaskManagerWithCopyAndLimitInHistoryTest
         extends TaskManagerTest<HistoricalTaskManagerImpl>
-        implements HistoryManagerTest {
+        {
 
     protected HistoryManager historyManager;
 
@@ -54,7 +53,7 @@ class HistoricalTaskManagerWithCopyAndLimitInHistoryTest
     }
 
     @Test
-    void canSafePreviouslyVersionOfTaskInHistoryManager() {
+    void canSafePreviouslyVersionOfTaskInHistoryManager() throws Exception {
         Task task = historyManager.createTask(TASK_1);
         historyManager.getTaskById(task.getId());
         historyManager.updateTask(getWithIDandUpdatedStatus(task.getId(), Status.IN_PROGRESS));
@@ -67,8 +66,7 @@ class HistoricalTaskManagerWithCopyAndLimitInHistoryTest
     }
 
     @Test
-    @Override
-    public void shouldAddTasksToViewedWhenGetTaskByIntegerId() {
+    public void shouldAddTasksToViewedWhenGetTaskByIntegerId() throws Exception {
         Epic epic = historyManager.createEpic(EPIC_1);
         Task task = historyManager.createTask(TASK_1);
         Subtask subtask = historyManager.createSubtask(SUBTASK_1);
@@ -86,7 +84,7 @@ class HistoricalTaskManagerWithCopyAndLimitInHistoryTest
     }
 
     @Test
-    public void shouldDeleteViewFromHistoryWhenUserDeleteTask() {
+    public void shouldDeleteViewFromHistoryWhenUserDeleteTask() throws Exception {
         Task task = taskManager.createTask(TASK_1);
         taskManager.getTaskById(task.getId());
 
@@ -98,7 +96,7 @@ class HistoricalTaskManagerWithCopyAndLimitInHistoryTest
     }
 
     @Test
-    void shouldDeleteViewFromHistoryWhenUserDeleteSubtask() {
+    void shouldDeleteViewFromHistoryWhenUserDeleteSubtask() throws Exception {
         Subtask subtask = taskManager.createSubtask(SUBTASK_1);
         taskManager.getSubTaskById(subtask.getId());
 
@@ -110,8 +108,7 @@ class HistoricalTaskManagerWithCopyAndLimitInHistoryTest
     }
 
     @Test
-    @Override
-    public void shouldDeleteViewFromHistoryWhenUserDeleteEpic() {
+    public void shouldDeleteViewFromHistoryWhenUserDeleteEpic() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1);
         taskManager.getEpicById(epic.getId());
 
@@ -123,8 +120,7 @@ class HistoricalTaskManagerWithCopyAndLimitInHistoryTest
     }
 
     @Test
-    @Override
-    public void shouldDeleteViewFromHistoryWhenUserDeleteEpicWithSubtasks() {
+    public void shouldDeleteViewFromHistoryWhenUserDeleteEpicWithSubtasks() throws Exception {
         Epic epic = historyManager.createEpic(EPIC_1, SUBTASK_1, SUBTASK_2);
         historyManager.getEpicById(epic.getId());
 

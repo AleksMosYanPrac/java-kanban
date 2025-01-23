@@ -35,7 +35,7 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    void canAddDifferentTypeTask() throws IOException {
+    void canAddDifferentTypeTask() throws Exception {
         Task task = taskManager.createTask(TASK_1);
         Epic epic = taskManager.createEpic(EPIC_1);
         Subtask subtask = taskManager.createSubtask(SUBTASK_1);
@@ -50,7 +50,7 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    void shouldCreateEpicWithLinkedSubtask() throws IOException {
+    void shouldCreateEpicWithLinkedSubtask() throws Exception {
         int linesWithColumnLabels = 0;
         int linesWithData = 2;
 
@@ -63,7 +63,7 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    void shouldDeleteTask() throws IOException {
+    void shouldDeleteTask() throws Exception {
         Task task = taskManager.createTask(TASK_1);
         int linesWithColumnLabels = 0;
         int linesWithData = 1;
@@ -77,7 +77,7 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    void shouldDeleteSubtaskWhenDeleteEpic() throws IOException {
+    void shouldDeleteSubtaskWhenDeleteEpic() throws Exception {
         Epic addedEpic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         int linesWithColumnLabels = 0;
         int linesWithData = 2;
@@ -91,7 +91,7 @@ public class FileBackedTaskManagerTest {
     }
 
     @Test
-    void shouldUnlinkDeletedSubtaskAndUpdateEpic() throws IOException {
+    void shouldUnlinkDeletedSubtaskAndUpdateEpic() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         Subtask addedSubtask = epic.getSubtasks().getFirst();
 

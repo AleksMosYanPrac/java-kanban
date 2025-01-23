@@ -22,7 +22,7 @@ public class InFileSubtaskRepositoryImpl implements Repository<Subtask> {
     public List<Subtask> getAll() {
         List<Subtask> result = new ArrayList<>();
         for (DataSet dataSet : source.read(new DataQuery("TYPE", "SUBTASK"))) {
-            java.lang.String epicId = dataSet.getString("epic");
+            String epicId = dataSet.getString("epic");
             if (epicId.isBlank()) {
                 result.add(fromDataSet(dataSet));
             } else {
@@ -48,7 +48,7 @@ public class InFileSubtaskRepositoryImpl implements Repository<Subtask> {
             return Optional.empty();
         } else {
             DataSet dataSet = result.getFirst();
-            java.lang.String epicId = dataSet.getString("epic");
+            String epicId = dataSet.getString("epic");
             if (epicId.isBlank()) {
                 return Optional.of(fromDataSet(dataSet));
             } else {

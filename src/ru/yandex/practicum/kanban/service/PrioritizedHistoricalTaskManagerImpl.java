@@ -11,7 +11,7 @@ import ru.yandex.practicum.kanban.service.services.PriorityService;
 import ru.yandex.practicum.kanban.service.services.RepositoryService;
 import ru.yandex.practicum.kanban.service.services.TaskService;
 
-import java.util.TreeSet;
+import java.util.Set;
 
 public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskManagerImpl implements PriorityManager {
 
@@ -28,11 +28,7 @@ public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskMa
     @Override
     public Task createTask(TaskDTO task) throws PriorityManagerTimeIntersection {
         Task newTask = taskService.createTask(task);
-        if (priorityService.hasTimeIntersection(newTask)) {
-            throw new PriorityManagerTimeIntersection(
-                    task.getStartTime() + " and duration:" +
-                            task.getDurationInMinutes() + "has time intersection with another Tasks");
-        }
+        checkTimeIntersection(task, newTask);
         repositoryService.addTask(newTask);
         priorityService.add(newTask);
         return newTask;
@@ -41,19 +37,18 @@ public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskMa
     @Override
     public Subtask createSubtask(TaskDTO subtask) throws PriorityManagerTimeIntersection {
         Subtask newSubtask = taskService.createSubtask(subtask);
-        if (priorityService.hasTimeIntersection(newSubtask)) {
-            throw new PriorityManagerTimeIntersection(
-                    subtask.getStartTime() + " and duration:" +
-                            subtask.getDurationInMinutes() + "has time intersection with another Tasks");
-        }
+        checkTimeIntersection(subtask, newSubtask);
         repositoryService.addSubtask(newSubtask);
         priorityService.add(newSubtask);
         return newSubtask;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic) {
-        return super.createEpic(epic);
+    public Epic createEpic(TaskDTO epic) throws Exception {
+        Epic newEpic = taskService.createEpic(epic);
+        checkTimeIntersection(epic, newEpic);
+        repositoryService.addEpic(newEpic);
+        return newEpic;
     }
 
     @Override
@@ -62,7 +57,9 @@ public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskMa
         if (newEpic.getSubtasks().stream().anyMatch(priorityService::hasTimeIntersection)) {
             throw new PriorityManagerTimeIntersection("One or more subtasks has time intersection with another Tasks");
         } else {
-            newEpic.getSubtasks().forEach(priorityService::add);
+            for (Subtask subtask : newEpic.getSubtasks()) {
+                priorityService.add(subtask);
+            }
         }
         repositoryService.addEpic(newEpic);
         return newEpic;
@@ -72,11 +69,7 @@ public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskMa
     public Task updateTask(TaskDTO task) throws PriorityManagerTimeIntersection {
         Task taskById = repositoryService.getTaskById(task.getId()).orElseThrow();
         Task updatedTask = taskService.createTask(task, taskById);
-        if (priorityService.hasTimeIntersection(updatedTask)) {
-            throw new PriorityManagerTimeIntersection(
-                    task.getStartTime() + " and duration:" +
-                            task.getDurationInMinutes() + "has time intersection with another Tasks");
-        }
+        checkTimeIntersection(task, updatedTask);
         priorityService.update(updatedTask);
         repositoryService.updateTask(updatedTask);
         return updatedTask;
@@ -86,11 +79,7 @@ public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskMa
     public Subtask updateSubtask(TaskDTO subtask) throws PriorityManagerTimeIntersection {
         Subtask subtaskById = repositoryService.getSubtaskById(subtask.getId()).orElseThrow();
         Subtask updatedSubtask = taskService.createSubtask(subtask, subtaskById);
-        if (priorityService.hasTimeIntersection(updatedSubtask)) {
-            throw new PriorityManagerTimeIntersection(
-                    subtask.getStartTime() + " and duration:" +
-                            subtask.getDurationInMinutes() + "has time intersection with another Tasks");
-        }
+        checkTimeIntersection(subtask, updatedSubtask);
         priorityService.update(updatedSubtask);
         repositoryService.updateSubtask(updatedSubtask);
         return updatedSubtask;
@@ -118,7 +107,15 @@ public final class PrioritizedHistoricalTaskManagerImpl extends HistoricalTaskMa
     }
 
     @Override
-    public TreeSet<Task> getPrioritizedTasks() {
+    public Set<Task> getPrioritizedTasks() {
         return priorityService.sortByStarTime();
+    }
+
+    private void checkTimeIntersection(TaskDTO task, Task createdTask) throws PriorityManagerTimeIntersection {
+        if (priorityService.hasTimeIntersection(createdTask)) {
+            throw new PriorityManagerTimeIntersection(
+                    task.getStartTime() + " and duration:" +
+                            task.getDurationInMinutes() + "has time intersection with another Tasks");
+        }
     }
 }

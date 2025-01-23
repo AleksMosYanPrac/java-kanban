@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface TaskManager {
 
-    Task createTask(TaskDTO task);
+    Task createTask(TaskDTO task) throws Exception;
 
-    Subtask createSubtask(TaskDTO subtask);
+    Subtask createSubtask(TaskDTO subtask) throws Exception;
 
-    Epic createEpic(TaskDTO epic);
+    Epic createEpic(TaskDTO epic) throws Exception;
 
-    Epic createEpic(TaskDTO epic, TaskDTO... subtasks);
+    Epic createEpic(TaskDTO epic, TaskDTO... subtasks) throws Exception;
 
     List<Subtask> getSubtasksForEpic(TaskDTO epic);
 
@@ -25,9 +25,9 @@ public interface TaskManager {
 
     Epic deleteEpic(TaskDTO epic);
 
-    Task updateTask(TaskDTO task);
+    Task updateTask(TaskDTO task) throws Exception;
 
-    Subtask updateSubtask(TaskDTO subtask);
+    Subtask updateSubtask(TaskDTO subtask) throws Exception;
 
     Task getTaskById(int id);
 

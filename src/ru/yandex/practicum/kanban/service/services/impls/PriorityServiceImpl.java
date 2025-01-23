@@ -6,23 +6,26 @@ import ru.yandex.practicum.kanban.service.services.PriorityService;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class PriorityServiceImpl implements PriorityService {
 
-    private final TreeSet<Task> prioritizedTaskSet;
+    private final Set<Task> prioritizedTaskSet;
 
     public PriorityServiceImpl() {
         this.prioritizedTaskSet = new TreeSet<>(new StartTimeComparator());
     }
 
-    public PriorityServiceImpl(List<Task> taskList) {
+    public PriorityServiceImpl(List<Task> taskList) throws PriorityManagerTimeIntersection {
         this.prioritizedTaskSet = new TreeSet<>(new StartTimeComparator());
-        taskList.forEach(this::add);
+        for (Task task: taskList){
+            add(task);
+        }
     }
 
     @Override
-    public Task add(Task task) {
+    public Task add(Task task) throws PriorityManagerTimeIntersection {
         if (task.hasStartTimeAndDuration()) {
             if (hasTimeIntersection(task)) {
                 throw new PriorityManagerTimeIntersection(
@@ -43,12 +46,12 @@ public class PriorityServiceImpl implements PriorityService {
     }
 
     @Override
-    public TreeSet<Task> sortByStarTime() {
-        return new TreeSet<>(prioritizedTaskSet);
+    public Set<Task> sortByStarTime() {
+        return prioritizedTaskSet;
     }
 
     @Override
-    public void update(Task updatedTask) {
+    public void update(Task updatedTask) throws PriorityManagerTimeIntersection {
         delete(updatedTask);
         add(updatedTask);
     }

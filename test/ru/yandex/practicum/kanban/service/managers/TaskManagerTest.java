@@ -21,7 +21,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected abstract void setUp();
 
     @Test
-    protected void canCreateModelObjects() {
+    protected void canCreateModelObjects() throws Exception {
 
         Task task = taskManager.createTask(TASK_1);
         Epic epic = taskManager.createEpic(EPIC_1);
@@ -35,7 +35,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void canCreateComplexEpic() {
+    void canCreateComplexEpic() throws Exception {
 
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
 
@@ -46,7 +46,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void shouldFindAndReturnSubtaskListForAvailableEpic() {
+    void shouldFindAndReturnSubtaskListForAvailableEpic() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         TaskDTO epicDTO = getWithID(epic.getId());
 
@@ -59,7 +59,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void shouldReturnEmptySubtaskListWhenAvailableEpicHasNotSubtasks() {
+    void shouldReturnEmptySubtaskListWhenAvailableEpicHasNotSubtasks() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1);
         TaskDTO epicDTO = getWithID(epic.getId());
 
@@ -80,7 +80,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void canDeleteModelObjects() {
+    void canDeleteModelObjects() throws Exception {
         Task task = taskManager.createTask(TASK_1);
         Epic epic = taskManager.createEpic(EPIC_1);
         Subtask subtask = taskManager.createSubtask(SUBTASK_1);
@@ -97,7 +97,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void shouldUpdateEpicWhenDeleteSubtaskWhichContainsInEpic() {
+    void shouldUpdateEpicWhenDeleteSubtaskWhichContainsInEpic() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         Subtask subtask = repositoryService.getAllSubtasks().getFirst();
 
@@ -110,7 +110,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void shouldDeleteIncludedSubtaskWhenDeleteEpic() {
+    void shouldDeleteIncludedSubtaskWhenDeleteEpic() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
 
         taskManager.deleteEpic(getWithID(epic.getId()));
@@ -139,7 +139,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void canUpdateDataForTask() {
+    void canUpdateDataForTask() throws Exception {
         Task task = taskManager.createTask(new TaskDTO("TASK", "TASK FOR TEST", "NEW"));
 
         taskManager.updateTask(new TaskDTO(task.getId(), "TASK", "TASK FOR TEST", "IN_PROGRESS"));
@@ -150,7 +150,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void canUpdateDataForSubtaskWithoutEpic() {
+    void canUpdateDataForSubtaskWithoutEpic() throws Exception {
         Subtask subtask = taskManager.createSubtask(new TaskDTO("TASK", "TASK FOR TEST", "NEW"));
 
         taskManager.updateSubtask(new TaskDTO(subtask.getId(), "TASK", "-", "IN_PROGRESS"));
@@ -161,7 +161,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void shouldUpdateEpicDataWhenUpdateSubtask() {
+    void shouldUpdateEpicDataWhenUpdateSubtask() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         Subtask subtask = epic.getSubtasks().getFirst();
 
@@ -178,7 +178,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    void shouldFindModelObjectsByIntegerId() {
+    void shouldFindModelObjectsByIntegerId() throws Exception {
         Task task = taskManager.createTask(TASK_1);
         Epic epic = taskManager.createEpic(EPIC_1);
         Subtask subtask = taskManager.createSubtask(SUBTASK_1);

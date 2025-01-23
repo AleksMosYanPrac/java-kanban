@@ -21,28 +21,28 @@ public class TaskManagerImpl implements TaskManager {
     }
 
     @Override
-    public Task createTask(TaskDTO task) {
+    public Task createTask(TaskDTO task) throws Exception {
         Task newTask = taskService.createTask(task);
         repositoryService.addTask(newTask);
         return newTask;
     }
 
     @Override
-    public Subtask createSubtask(TaskDTO subtask) {
+    public Subtask createSubtask(TaskDTO subtask) throws Exception {
         Subtask newSubtask = taskService.createSubtask(subtask);
         repositoryService.addSubtask(newSubtask);
         return newSubtask;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic) {
+    public Epic createEpic(TaskDTO epic) throws Exception {
         Epic newEpic = taskService.createEpic(epic);
         repositoryService.addEpic(newEpic);
         return newEpic;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic, TaskDTO... subtasks) {
+    public Epic createEpic(TaskDTO epic, TaskDTO... subtasks) throws Exception {
         Epic newEpic = taskService.createEpic(epic, subtasks);
         repositoryService.addEpic(newEpic);
         return newEpic;
@@ -56,7 +56,7 @@ public class TaskManagerImpl implements TaskManager {
 
     @Override
     public Task deleteTask(TaskDTO task) {
-       return repositoryService.removeTask(task.getId());
+        return repositoryService.removeTask(task.getId());
     }
 
     @Override
@@ -66,21 +66,21 @@ public class TaskManagerImpl implements TaskManager {
 
     @Override
     public Epic deleteEpic(TaskDTO epic) {
-       return repositoryService.removeEpic(epic.getId());
+        return repositoryService.removeEpic(epic.getId());
     }
 
     @Override
-    public Task updateTask(TaskDTO task) {
+    public Task updateTask(TaskDTO task) throws Exception {
         Task taskById = repositoryService.getTaskById(task.getId()).orElseThrow();
-        Task updatedTask = taskService.createTask(task,taskById);
+        Task updatedTask = taskService.createTask(task, taskById);
         repositoryService.updateTask(updatedTask);
         return updatedTask;
     }
 
     @Override
-    public Subtask updateSubtask(TaskDTO subtask) {
+    public Subtask updateSubtask(TaskDTO subtask) throws Exception {
         Subtask subtaskById = repositoryService.getSubtaskById(subtask.getId()).orElseThrow();
-        Subtask updatedSubtask = taskService.createSubtask(subtask,subtaskById);
+        Subtask updatedSubtask = taskService.createSubtask(subtask, subtaskById);
         repositoryService.updateSubtask(updatedSubtask);
         return updatedSubtask;
     }

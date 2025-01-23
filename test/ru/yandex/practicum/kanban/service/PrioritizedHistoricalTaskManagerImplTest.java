@@ -7,20 +7,17 @@ import ru.yandex.practicum.kanban.model.TaskDTO;
 import ru.yandex.practicum.kanban.service.exceptions.PriorityManagerTimeIntersection;
 import ru.yandex.practicum.kanban.service.managers.HistoryManager;
 import ru.yandex.practicum.kanban.service.managers.PriorityManager;
-import ru.yandex.practicum.kanban.service.managers.PriorityManagerTest;
 import ru.yandex.practicum.kanban.service.services.PriorityService;
 import ru.yandex.practicum.kanban.service.services.impls.PriorityServiceImpl;
 
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.practicum.kanban.service.TestDataDTO.*;
 
 class PrioritizedHistoricalTaskManagerImplTest
-        extends HistoricalTaskManagerWithoutCopyAndLimitInHistoryTest
-        implements PriorityManagerTest {
+        extends HistoricalTaskManagerWithoutCopyAndLimitInHistoryTest {
 
     private PriorityManager priorityManager;
     PriorityService priorityService;
@@ -38,7 +35,7 @@ class PrioritizedHistoricalTaskManagerImplTest
     }
 
     @Test
-    public void shouldThrowStartTimeExceptionWhenAddTaskWithTimeIntersection() {
+    public void shouldThrowStartTimeExceptionWhenAddTaskWithTimeIntersection() throws Exception {
         priorityManager.createTask(getDatedTask());
         priorityManager.createSubtask(getDatedSubtask());
 
@@ -51,28 +48,30 @@ class PrioritizedHistoricalTaskManagerImplTest
     }
 
     @Test
-    public void shouldThrowStartTimeExceptionWhenUpdatedTaskHasTimeIntersection() {
+    public void shouldThrowStartTimeExceptionWhenUpdatedTaskHasTimeIntersection() throws Exception {
         String date1 = "00:00 01.01.2025";
         String date2 = "00:00 02.01.2025";
         String intersection = "00:30 02.01.2025";
         Task task_1 = priorityManager.createTask(
-                new TaskDTO("task1","-","NEW",date1,60));
+                new TaskDTO("task1", "-", "NEW", date1, 60));
         Task task_2 = priorityManager.createTask(
-                new TaskDTO("task2","-","NEW",date2,60));
+                new TaskDTO("task2", "-", "NEW", date2, 60));
         TaskDTO updatedTask_1 =
-                new TaskDTO(task_1.getId(),"task1","-","NEW",intersection,60);
+                new TaskDTO(task_1.getId(), "task1", "-", "NEW", intersection, 60);
 
         assertThrows(PriorityManagerTimeIntersection.class,
                 () -> priorityManager.updateTask(updatedTask_1));
     }
 
     @Test
-    public void shouldReturnSortedByStartTimeTaskSet() {
+    public void shouldReturnSortedByStartTimeTaskSet() throws Exception {
         priorityManager.createTask(getDatedTask());
         priorityManager.createSubtask(getDatedSubtask());
 
-        TreeSet<Task> prioritizedTasks = priorityManager.getPrioritizedTasks();
+        Set<Task> prioritizedTasks = priorityManager.getPrioritizedTasks();
+        List<Task> taskList = prioritizedTasks.stream().toList();
 
-        assertTrue(prioritizedTasks.first().getStartTime().isBefore(prioritizedTasks.last().getStartTime()));
+        assertEquals(2, taskList.size());
+        assertTrue(taskList.getFirst().getStartTime().isBefore(taskList.getLast().getStartTime()));
     }
 }

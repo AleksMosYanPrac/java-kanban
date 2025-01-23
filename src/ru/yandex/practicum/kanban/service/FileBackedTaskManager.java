@@ -33,28 +33,28 @@ public final class FileBackedTaskManager extends TaskManagerImpl {
     }
 
     @Override
-    public Task createTask(TaskDTO task) {
+    public Task createTask(TaskDTO task) throws Exception {
         Task createdTask = super.createTask(task);
         saveData();
         return createdTask;
     }
 
     @Override
-    public Subtask createSubtask(TaskDTO subtask) {
+    public Subtask createSubtask(TaskDTO subtask) throws Exception {
         Subtask createdSubtask = super.createSubtask(subtask);
         saveData();
         return createdSubtask;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic) {
+    public Epic createEpic(TaskDTO epic) throws Exception {
         Epic createdEpic = super.createEpic(epic);
         saveData();
         return createdEpic;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic, TaskDTO... subtasks) {
+    public Epic createEpic(TaskDTO epic, TaskDTO... subtasks) throws Exception {
         Epic createdEpic = super.createEpic(epic, subtasks);
         saveData();
         return createdEpic;
@@ -87,14 +87,14 @@ public final class FileBackedTaskManager extends TaskManagerImpl {
     }
 
     @Override
-    public Task updateTask(TaskDTO task) {
+    public Task updateTask(TaskDTO task) throws Exception {
         Task updatedTask = super.updateTask(task);
         saveData();
         return updatedTask;
     }
 
     @Override
-    public Subtask updateSubtask(TaskDTO subtask) {
+    public Subtask updateSubtask(TaskDTO subtask) throws Exception {
         Subtask updatedSubtask = super.updateSubtask(subtask);
         saveData();
         return updatedSubtask;

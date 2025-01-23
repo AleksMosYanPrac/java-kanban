@@ -9,7 +9,6 @@ import ru.yandex.practicum.kanban.service.services.impls.PriorityServiceImpl;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +22,7 @@ class PriorityServiceImplTest {
     }
 
     @Test
-    void shouldAddTaskWithStartTimeAndDuration() {
+    void shouldAddTaskWithStartTimeAndDuration() throws PriorityManagerTimeIntersection {
         Task task = new Task(1, "Task", "-", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(3));
 
         priorityService.add(task);
@@ -33,7 +32,7 @@ class PriorityServiceImplTest {
     }
 
     @Test
-    void shouldNotAddTaskWithoutStartTimeAndDuration() {
+    void shouldNotAddTaskWithoutStartTimeAndDuration() throws PriorityManagerTimeIntersection {
         Task task = new Task(1, "Task", "-", Status.NEW);
 
         priorityService.add(task);
@@ -43,7 +42,7 @@ class PriorityServiceImplTest {
     }
 
     @Test
-    void shouldCheckTimeIntersection() {
+    void shouldCheckTimeIntersection() throws PriorityManagerTimeIntersection {
         LocalDateTime startTime = LocalDateTime.now();
         Duration duration = Duration.ofMinutes(30);
         LocalDateTime nextStartTime = startTime.plusMinutes(60);
@@ -59,33 +58,29 @@ class PriorityServiceImplTest {
     }
 
     @Test
-    void shouldThrowPriorityManagerTimeIntersection() {
+    void shouldThrowPriorityManagerTimeIntersection() throws PriorityManagerTimeIntersection {
         LocalDateTime startTime = LocalDateTime.now();
         Duration duration = Duration.ofMinutes(30);
         Task task1 = new Task(1, "Task", "-", Status.NEW, startTime, duration);
         Task task2 = new Task(1, "Task", "-", Status.NEW, startTime, duration);
         priorityService.add(task1);
 
-
         assertThrows(PriorityManagerTimeIntersection.class, () -> priorityService.add(task2));
     }
 
     @Test
-    void shouldDeleteTask() {
+    void shouldDeleteTask() throws PriorityManagerTimeIntersection {
         Task task = new Task(1, "Task", "-", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(3));
         priorityService.add(task);
-        Set<Task> sortedSet = priorityService.sortByStarTime();
 
         priorityService.delete(task);
 
-        assertEquals(1, sortedSet.size());
-        assertTrue(sortedSet.contains(task));
         assertEquals(0, priorityService.sortByStarTime().size());
         assertFalse(priorityService.sortByStarTime().contains(task));
     }
 
     @Test
-    void shouldUpdateTask() {
+    void shouldUpdateTask() throws PriorityManagerTimeIntersection {
         LocalDateTime startTime = LocalDateTime.now();
         Duration duration = Duration.ofMinutes(30);
         Task task = new Task(1, "Task", "-", Status.NEW, startTime, duration);

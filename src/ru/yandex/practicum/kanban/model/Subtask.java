@@ -36,12 +36,12 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        java.lang.String epicId = "null";
+        String epicId = "null";
         if (Objects.nonNull(epic)) {
             epicId = String.valueOf(epic.getId());
         }
         if (Objects.nonNull(startTime) && Objects.nonNull(duration)) {
-            java.lang.String dateTime = startTime.format(Task.DATE_TIME_FORMATTER);
+            String dateTime = startTime.format(Task.DATE_TIME_FORMATTER);
             long durationInMinutes = duration.toMinutes();
             return "Subtask{" +
                     "id=" + id +

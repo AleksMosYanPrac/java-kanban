@@ -19,7 +19,7 @@ public class PriorityServiceImpl implements PriorityService {
 
     public PriorityServiceImpl(List<Task> taskList) throws PriorityManagerTimeIntersection {
         this.prioritizedTaskSet = new TreeSet<>(new StartTimeComparator());
-        for (Task task: taskList){
+        for (Task task : taskList) {
             add(task);
         }
     }

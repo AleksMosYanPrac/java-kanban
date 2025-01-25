@@ -7,13 +7,15 @@ import ru.yandex.practicum.kanban.model.TaskDTO;
 import ru.yandex.practicum.kanban.repository.BackedRepository;
 import ru.yandex.practicum.kanban.service.exceptions.ManagerReadException;
 import ru.yandex.practicum.kanban.service.exceptions.ManagerSaveException;
+import ru.yandex.practicum.kanban.service.services.impls.RepositoryServiceImpl;
+import ru.yandex.practicum.kanban.service.services.impls.TaskServiceImpl;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileBackedTaskManager extends TaskManagerImpl {
+public final class FileBackedTaskManager extends TaskManagerImpl {
 
     private Path path;
     private List<BackedRepository> repositoryList;
@@ -21,9 +23,9 @@ public class FileBackedTaskManager extends TaskManagerImpl {
     public FileBackedTaskManager(BackedRepository<Task> tasks,
                                  BackedRepository<Epic> epics,
                                  BackedRepository<Subtask> subtasks,
-                                 HistoryManager historyManager,
                                  Path path) {
-        super(tasks.getRepository(), epics.getRepository(), subtasks.getRepository(), historyManager);
+        super(new TaskServiceImpl(),
+                new RepositoryServiceImpl(tasks.getRepository(), epics.getRepository(), subtasks.getRepository()));
         this.path = path;
         this.repositoryList = new ArrayList<>();
         repositoryList.addAll(List.of(tasks, epics, subtasks));
@@ -31,28 +33,28 @@ public class FileBackedTaskManager extends TaskManagerImpl {
     }
 
     @Override
-    public Task createTask(TaskDTO task) {
+    public Task createTask(TaskDTO task) throws Exception {
         Task createdTask = super.createTask(task);
         saveData();
         return createdTask;
     }
 
     @Override
-    public Subtask createSubtask(TaskDTO subtask) {
+    public Subtask createSubtask(TaskDTO subtask) throws Exception {
         Subtask createdSubtask = super.createSubtask(subtask);
         saveData();
         return createdSubtask;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic) {
+    public Epic createEpic(TaskDTO epic) throws Exception {
         Epic createdEpic = super.createEpic(epic);
         saveData();
         return createdEpic;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic, TaskDTO... subtasks) {
+    public Epic createEpic(TaskDTO epic, TaskDTO... subtasks) throws Exception {
         Epic createdEpic = super.createEpic(epic, subtasks);
         saveData();
         return createdEpic;
@@ -64,33 +66,38 @@ public class FileBackedTaskManager extends TaskManagerImpl {
     }
 
     @Override
-    public void deleteTask(TaskDTO task) {
-        super.deleteTask(task);
+    public Task deleteTask(TaskDTO task) {
+        Task deletedTask = super.deleteTask(task);
         saveData();
+        return deletedTask;
     }
 
     @Override
-    public void deleteSubtask(TaskDTO subtask) {
-        super.deleteSubtask(subtask);
+    public Subtask deleteSubtask(TaskDTO subtask) {
+        Subtask deletedeleteSubtask = super.deleteSubtask(subtask);
         saveData();
+        return deletedeleteSubtask;
     }
 
     @Override
-    public void deleteEpic(TaskDTO epic) {
-        super.deleteEpic(epic);
+    public Epic deleteEpic(TaskDTO epic) {
+        Epic deletedEpic = super.deleteEpic(epic);
         saveData();
+        return deletedEpic;
     }
 
     @Override
-    public void updateTask(TaskDTO task) {
-        super.updateTask(task);
+    public Task updateTask(TaskDTO task) throws Exception {
+        Task updatedTask = super.updateTask(task);
         saveData();
+        return updatedTask;
     }
 
     @Override
-    public void updateSubtask(TaskDTO subtask) {
-        super.updateSubtask(subtask);
+    public Subtask updateSubtask(TaskDTO subtask) throws Exception {
+        Subtask updatedSubtask = super.updateSubtask(subtask);
         saveData();
+        return updatedSubtask;
     }
 
     @Override
@@ -106,11 +113,6 @@ public class FileBackedTaskManager extends TaskManagerImpl {
     @Override
     public Epic getEpicById(int id) {
         return super.getEpicById(id);
-    }
-
-    @Override
-    public List<Task> getHistoryOfViewedTasks() {
-        return super.getHistoryOfViewedTasks();
     }
 
     private void readData() {

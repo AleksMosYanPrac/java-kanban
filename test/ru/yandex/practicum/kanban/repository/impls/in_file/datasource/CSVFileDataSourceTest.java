@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import ru.yandex.practicum.kanban.model.Status;
 import ru.yandex.practicum.kanban.model.Task;
-import ru.yandex.practicum.kanban.repository.TestData;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.practicum.kanban.repository.TestData.*;
 
 class CSVFileDataSourceTest {
-    private final String COLUMN_LABELS_LINE = "id,type,title,status,description,epic,subtasks";
+    private final String COLUMN_LABELS_LINE = "id,type,title,status,description,start_time,duration,epic,subtasks";
 
     private Path pathToEmptyFile;
     private Path pathToDataFile;

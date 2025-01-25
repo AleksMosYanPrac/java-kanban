@@ -1,8 +1,6 @@
 package ru.yandex.practicum.kanban.repository.impls.in_file;
 
-import ru.yandex.practicum.kanban.model.Epic;
-import ru.yandex.practicum.kanban.model.Status;
-import ru.yandex.practicum.kanban.model.Subtask;
+import ru.yandex.practicum.kanban.model.*;
 import ru.yandex.practicum.kanban.repository.Repository;
 import ru.yandex.practicum.kanban.repository.impls.in_file.datasource.DataQuery;
 import ru.yandex.practicum.kanban.repository.impls.in_file.datasource.DataSet;
@@ -90,11 +88,14 @@ public class InFileEpicRepositoryImpl implements Repository<Epic> {
     private Epic fromDataSet(DataSet epicDataSet, List<DataSet> subtasksDataSet) {
         Epic epic = fromDataSet(epicDataSet);
         for (DataSet dataSet : subtasksDataSet) {
-            Subtask subtask = new Subtask(dataSet.getInt("id"),
+            TaskDTO taskDTO = new TaskDTO(dataSet.getInt("id"),
                     dataSet.getString("title"),
                     dataSet.getString("description"),
-                    Status.valueOf(dataSet.getString("status")
-                    ));
+                    dataSet.getString("status"),
+                    dataSet.getString("start_time"),
+                    dataSet.getLong("duration")
+            );
+            Subtask subtask = new TaskBuilder().setId(taskDTO.getId()).setData(taskDTO).buildSubtask();
             subtask.addEpic(epic);
             epic.addSubtask(subtask);
         }
@@ -102,10 +103,14 @@ public class InFileEpicRepositoryImpl implements Repository<Epic> {
     }
 
     private Epic fromDataSet(DataSet dataSet) {
-        return new Epic(dataSet.getInt("id"),
+        TaskDTO taskDTO = new TaskDTO(dataSet.getInt("id"),
                 dataSet.getString("title"),
                 dataSet.getString("description"),
-                Status.valueOf(dataSet.getString("status")));
+                dataSet.getString("status"),
+                dataSet.getString("start_time"),
+                dataSet.getLong("duration")
+        );
+        return new TaskBuilder().setId(taskDTO.getId()).setData(taskDTO).buildEpic();
     }
 
     private DataSet toDataSet(Epic epic) {
@@ -114,6 +119,8 @@ public class InFileEpicRepositoryImpl implements Repository<Epic> {
                 .add("title", epic.getTitle())
                 .add("description", epic.getDescription())
                 .add("status", epic.getStatus().toString())
+                .add("start_time", getStringStartTime(epic))
+                .add("duration", getStringDuration(epic))
                 .add("subtasks", idOfSubtasks(epic.getSubtasks()))
                 .build();
     }
@@ -141,5 +148,21 @@ public class InFileEpicRepositoryImpl implements Repository<Epic> {
             }
         }
         return integerList;
+    }
+
+    private String getStringStartTime(Epic epic) {
+        String starTime = "";
+        if (epic.hasStartTimeAndDuration()) {
+            starTime = epic.getStartTime().format(Task.DATE_TIME_FORMATTER);
+        }
+        return starTime;
+    }
+
+    private String getStringDuration(Epic epic) {
+        String duration = "";
+        if (epic.hasStartTimeAndDuration()) {
+            duration = Long.toString(epic.getDuration().toMinutes());
+        }
+        return duration;
     }
 }

@@ -7,6 +7,7 @@ import ru.yandex.practicum.kanban.model.Epic;
 import ru.yandex.practicum.kanban.model.Subtask;
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.repository.TestData;
+import ru.yandex.practicum.kanban.service.managers.TaskManager;
 import ru.yandex.practicum.kanban.service.util.Managers;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class FileStoredTaskManagerWithCSVDataSourceTest {
     }
 
     @Test
-    void canAddDifferentTypeTask() throws IOException {
+    void canAddDifferentTypeTask() throws Exception {
         Task task = taskManager.createTask(TASK_1);
         Epic epic = taskManager.createEpic(EPIC_1);
         Subtask subtask = taskManager.createSubtask(SUBTASK_1);
@@ -51,7 +52,7 @@ public class FileStoredTaskManagerWithCSVDataSourceTest {
     }
 
     @Test
-    void shouldCreateEpicWithLinkedSubtask() throws IOException {
+    void shouldCreateEpicWithLinkedSubtask() throws Exception {
         int linesWithColumnLabels = 1;
         int linesWithData = 2;
 
@@ -64,7 +65,7 @@ public class FileStoredTaskManagerWithCSVDataSourceTest {
     }
 
     @Test
-    void shouldDeleteSubtaskWhenDeleteEpic() throws IOException {
+    void shouldDeleteSubtaskWhenDeleteEpic() throws Exception {
         Epic addedEpic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         int linesWithColumnLabels = 1;
         int linesWithData = 2;
@@ -78,7 +79,7 @@ public class FileStoredTaskManagerWithCSVDataSourceTest {
     }
 
     @Test
-    void shouldUnlinkDeletedSubtaskAndUpdateEpic() throws IOException {
+    void shouldUnlinkDeletedSubtaskAndUpdateEpic() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         Subtask addedSubtask = epic.getSubtasks().getFirst();
 

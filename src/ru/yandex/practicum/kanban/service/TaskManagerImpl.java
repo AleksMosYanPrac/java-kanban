@@ -4,151 +4,99 @@ import ru.yandex.practicum.kanban.model.Epic;
 import ru.yandex.practicum.kanban.model.Subtask;
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.model.TaskDTO;
-import ru.yandex.practicum.kanban.repository.Repository;
-import ru.yandex.practicum.kanban.service.util.IdGenerator;
+import ru.yandex.practicum.kanban.service.managers.TaskManager;
+import ru.yandex.practicum.kanban.service.services.RepositoryService;
+import ru.yandex.practicum.kanban.service.services.TaskService;
 
 import java.util.List;
-import java.util.Objects;
 
 public class TaskManagerImpl implements TaskManager {
 
-    private final Repository<Task> taskRepository;
-    private final Repository<Epic> epicRepository;
-    private final Repository<Subtask> subtaskRepository;
-    private final HistoryManager historyManager;
+    protected final TaskService taskService;
+    protected final RepositoryService repositoryService;
 
-    public TaskManagerImpl(Repository<Task> tasks, Repository<Epic> epics, Repository<Subtask> subtasks, HistoryManager historyManager) {
-        this.taskRepository = tasks;
-        this.epicRepository = epics;
-        this.subtaskRepository = subtasks;
-        this.historyManager = historyManager;
+    public TaskManagerImpl(TaskService taskService, RepositoryService repositoryService) {
+        this.taskService = taskService;
+        this.repositoryService = repositoryService;
     }
 
     @Override
-    public Task createTask(TaskDTO task) {
-        int id = IdGenerator.generate();
-        Task newTask = new Task(id, task.getTitle(), task.getDescription(), task.getStatus());
-        taskRepository.create(newTask);
+    public Task createTask(TaskDTO task) throws Exception {
+        Task newTask = taskService.createTask(task);
+        repositoryService.addTask(newTask);
         return newTask;
     }
 
     @Override
-    public Subtask createSubtask(TaskDTO subtask) {
-        int id = IdGenerator.generate();
-        Subtask newSubtask = new Subtask(id, subtask.getTitle(), subtask.getDescription(), subtask.getStatus());
-        subtaskRepository.create(newSubtask);
+    public Subtask createSubtask(TaskDTO subtask) throws Exception {
+        Subtask newSubtask = taskService.createSubtask(subtask);
+        repositoryService.addSubtask(newSubtask);
         return newSubtask;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic) {
-        int id = IdGenerator.generate();
-        Epic newEpic = new Epic(id, epic.getTitle(), epic.getDescription(), epic.getStatus());
-        epicRepository.create(newEpic);
+    public Epic createEpic(TaskDTO epic) throws Exception {
+        Epic newEpic = taskService.createEpic(epic);
+        repositoryService.addEpic(newEpic);
         return newEpic;
     }
 
     @Override
-    public Epic createEpic(TaskDTO epic, TaskDTO... subtasks) {
-        Epic newEpic = createEpic(epic);
-        for (TaskDTO subtask : subtasks) {
-            Subtask newSubtask = createSubtask(subtask);
-            linkSubtaskWithEpic(newEpic, newSubtask);
-            subtaskRepository.update(newSubtask);
-        }
-        epicRepository.update(newEpic);
+    public Epic createEpic(TaskDTO epic, TaskDTO... subtasks) throws Exception {
+        Epic newEpic = taskService.createEpic(epic, subtasks);
+        repositoryService.addEpic(newEpic);
         return newEpic;
     }
 
     @Override
     public List<Subtask> getSubtasksForEpic(TaskDTO epic) {
-        Epic epicById = epicRepository.getById(epic.getId()).orElseThrow();
+        Epic epicById = repositoryService.getEpicById(epic.getId()).orElseThrow();
         return epicById.getSubtasks();
     }
 
     @Override
-    public void deleteTask(TaskDTO task) {
-        Task taskById = taskRepository.getById(task.getId()).orElseThrow();
-        historyManager.remove(taskById.getId());
-        taskRepository.deleteById(taskById.getId());
+    public Task deleteTask(TaskDTO task) {
+        return repositoryService.removeTask(task.getId());
     }
 
     @Override
-    public void deleteSubtask(TaskDTO subtask) {
-        Subtask subtaskById = subtaskRepository.getById(subtask.getId()).orElseThrow();
-        if (Objects.nonNull(subtaskById.getEpic())) {
-            Epic epic = subtaskById.getEpic();
-            unlinkSubtaskFromEpic(epic, subtaskById);
-            epicRepository.update(epic);
-        }
-        historyManager.remove(subtaskById.getId());
-        subtaskRepository.deleteById(subtask.getId());
+    public Subtask deleteSubtask(TaskDTO subtask) {
+        return repositoryService.removeSubtask(subtask.getId());
     }
 
     @Override
-    public void deleteEpic(TaskDTO epic) {
-        Epic epicById = epicRepository.getById(epic.getId()).orElseThrow();
-        List<Subtask> subtasks = epicById.getSubtasks();
-        for (Subtask subtask : subtasks) {
-            historyManager.remove(subtask.getId());
-            subtaskRepository.deleteById(subtask.getId());
-        }
-        historyManager.remove(epicById.getId());
-        epicRepository.deleteById(epicById.getId());
+    public Epic deleteEpic(TaskDTO epic) {
+        return repositoryService.removeEpic(epic.getId());
     }
 
     @Override
-    public void updateTask(TaskDTO task) {
-        int updatedTaskId = taskRepository.getById(task.getId()).orElseThrow().getId();
-        Task updatedTask = new Task(updatedTaskId, task.getTitle(), task.getDescription(), task.getStatus());
-        taskRepository.update(updatedTask);
+    public Task updateTask(TaskDTO task) throws Exception {
+        Task taskById = repositoryService.getTaskById(task.getId()).orElseThrow();
+        Task updatedTask = taskService.createTask(task, taskById);
+        repositoryService.updateTask(updatedTask);
+        return updatedTask;
     }
 
     @Override
-    public void updateSubtask(TaskDTO subtask) {
-        Subtask subtaskById = subtaskRepository.getById(subtask.getId()).orElseThrow();
-        Subtask updatedSubtask = new Subtask(subtask.getId(), subtask.getTitle(), subtask.getDescription(), subtask.getStatus());
-        if (Objects.nonNull(subtaskById.getEpic())) {
-            Epic linkedEpic = epicRepository.getById(subtaskById.getEpic().getId()).orElseThrow();
-            unlinkSubtaskFromEpic(linkedEpic, subtaskById);
-            linkSubtaskWithEpic(linkedEpic, updatedSubtask);
-            epicRepository.update(linkedEpic);
-        }
-        subtaskRepository.update(updatedSubtask);
+    public Subtask updateSubtask(TaskDTO subtask) throws Exception {
+        Subtask subtaskById = repositoryService.getSubtaskById(subtask.getId()).orElseThrow();
+        Subtask updatedSubtask = taskService.createSubtask(subtask, subtaskById);
+        repositoryService.updateSubtask(updatedSubtask);
+        return updatedSubtask;
     }
 
     @Override
     public Task getTaskById(int id) {
-        Task task = taskRepository.getById(id).orElseThrow();
-        historyManager.add(task);
-        return task;
+        return repositoryService.getTaskById(id).orElseThrow();
     }
 
     @Override
     public Subtask getSubTaskById(int id) {
-        Subtask subtask = subtaskRepository.getById(id).orElseThrow();
-        historyManager.add(subtask);
-        return subtask;
+        return repositoryService.getSubtaskById(id).orElseThrow();
     }
 
     @Override
     public Epic getEpicById(int id) {
-        Epic epic = epicRepository.getById(id).orElseThrow();
-        historyManager.add(epic);
-        return epic;
-    }
-
-    @Override
-    public List<Task> getHistoryOfViewedTasks() {
-        return historyManager.getHistory();
-    }
-
-    private void linkSubtaskWithEpic(Epic newEpic, Subtask subtask) {
-        newEpic.addSubtask(subtask);
-        subtask.addEpic(newEpic);
-    }
-
-    private void unlinkSubtaskFromEpic(Epic epic, Subtask subtask) {
-        epic.deleteSubtask(subtask);
+        return repositoryService.getEpicById(id).orElseThrow();
     }
 }

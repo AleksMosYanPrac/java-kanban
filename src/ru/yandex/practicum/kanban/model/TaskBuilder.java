@@ -59,7 +59,7 @@ public class TaskBuilder {
     private LocalDateTime parseStartTime(String startTime) throws IllegalArgumentException {
         LocalDateTime dateTime = null;
         try {
-            if (!startTime.isBlank()) {
+            if (!startTime.isBlank() && !startTime.equals("null")) {
                 dateTime = LocalDateTime.parse(startTime, Task.DATE_TIME_FORMATTER);
             }
         } catch (DateTimeParseException e) {

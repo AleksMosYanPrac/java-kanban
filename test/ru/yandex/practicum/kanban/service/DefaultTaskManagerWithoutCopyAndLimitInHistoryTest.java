@@ -7,46 +7,33 @@ import ru.yandex.practicum.kanban.model.Status;
 import ru.yandex.practicum.kanban.model.Subtask;
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.repository.HistoryRepository;
-import ru.yandex.practicum.kanban.repository.Repository;
 import ru.yandex.practicum.kanban.repository.impls.in_memory.*;
-import ru.yandex.practicum.kanban.service.managers.HistoryManager;
-import ru.yandex.practicum.kanban.service.managers.TaskManagerTest;
-import ru.yandex.practicum.kanban.service.services.HistoryService;
-import ru.yandex.practicum.kanban.service.services.RepositoryService;
-import ru.yandex.practicum.kanban.service.services.TaskService;
+import ru.yandex.practicum.kanban.service.managers.TaskManager;
 import ru.yandex.practicum.kanban.service.services.impls.HistoryServiceImpl;
+import ru.yandex.practicum.kanban.service.services.impls.PriorityServiceImpl;
 import ru.yandex.practicum.kanban.service.services.impls.RepositoryServiceImpl;
 import ru.yandex.practicum.kanban.service.services.impls.TaskServiceImpl;
+import ru.yandex.practicum.kanban.service.util.Managers;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.practicum.kanban.service.TestDataDTO.*;
 
-class HistoricalTaskManagerWithoutCopyAndLimitInHistoryTest
-        extends TaskManagerTest<HistoricalTaskManagerImpl> {
+class DefaultTaskManagerWithoutCopyAndLimitInHistoryTest extends DefaultTaskManagerImplTest {
 
-    protected HistoryManager historyManager;
+    protected TaskManager historyManager;
 
-    protected TaskService taskService;
-    protected RepositoryService repositoryService;
-    protected HistoryService historyService;
-
-    private Repository<Task> taskRepository = new InMemoryTaskRepositoryImpl();
-    private Repository<Epic> epicRepository = new InMemoryEpicRepositoryImpl();
-    private Repository<Subtask> subtaskRepository = new InMemorySubtaskRepositoryImpl();
     private HistoryRepository historyRepository = new InMemoryHistoryRepositoryWithoutCopyAndLimitElements();
 
     @BeforeEach
     protected void setUp() {
-        this.taskService = new TaskServiceImpl();
-        this.repositoryService = new RepositoryServiceImpl(taskRepository, epicRepository, subtaskRepository);
-        this.historyService = new HistoryServiceImpl(historyRepository);
-
-        historyManager = new HistoricalTaskManagerImpl(taskService, repositoryService, historyService);
-        super.taskService = taskService;
-        super.repositoryService = repositoryService;
-        super.taskManager = (HistoricalTaskManagerImpl) historyManager;
+        taskService = new TaskServiceImpl();
+        repositoryService = new RepositoryServiceImpl(taskRepository, epicRepository, subtaskRepository);
+        historyService = new HistoryServiceImpl(historyRepository);
+        priorityService = new PriorityServiceImpl();
+        historyManager = Managers.getDefault(taskRepository, subtaskRepository, epicRepository, historyRepository);
+        super.taskManager = historyManager;
     }
 
     @Test
@@ -86,7 +73,7 @@ class HistoricalTaskManagerWithoutCopyAndLimitInHistoryTest
         taskManager.getTaskById(task.getId());
 
         List<Task> history = taskManager.getHistoryOfViewedTasks();
-        taskManager.deleteTask(getWithID(task.getId()));
+        taskManager.deleteTask(task.getId());
 
         assertEquals(1, history.size());
         assertTrue(taskManager.getHistoryOfViewedTasks().isEmpty());
@@ -98,7 +85,7 @@ class HistoricalTaskManagerWithoutCopyAndLimitInHistoryTest
         taskManager.getSubTaskById(subtask.getId());
 
         List<Task> history = taskManager.getHistoryOfViewedTasks();
-        taskManager.deleteSubtask(getWithID(subtask.getId()));
+        taskManager.deleteSubtask(subtask.getId());
 
         assertEquals(1, history.size());
         assertTrue(taskManager.getHistoryOfViewedTasks().isEmpty());
@@ -110,7 +97,7 @@ class HistoricalTaskManagerWithoutCopyAndLimitInHistoryTest
         taskManager.getEpicById(epic.getId());
 
         List<Task> history = taskManager.getHistoryOfViewedTasks();
-        taskManager.deleteEpic(getWithID(epic.getId()));
+        taskManager.deleteEpic(epic.getId());
 
         assertEquals(1, history.size());
         assertTrue(taskManager.getHistoryOfViewedTasks().isEmpty());
@@ -122,7 +109,7 @@ class HistoricalTaskManagerWithoutCopyAndLimitInHistoryTest
         historyManager.getEpicById(epic.getId());
 
         List<Task> history = historyManager.getHistoryOfViewedTasks();
-        historyManager.deleteEpic(getWithID(epic.getId()));
+        historyManager.deleteEpic(epic.getId());
 
         assertEquals(1, history.size());
         assertTrue(taskManager.getHistoryOfViewedTasks().isEmpty());

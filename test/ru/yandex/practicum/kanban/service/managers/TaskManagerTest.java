@@ -2,6 +2,8 @@ package ru.yandex.practicum.kanban.service.managers;
 
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.kanban.model.*;
+import ru.yandex.practicum.kanban.service.services.HistoryService;
+import ru.yandex.practicum.kanban.service.services.PriorityService;
 import ru.yandex.practicum.kanban.service.services.RepositoryService;
 import ru.yandex.practicum.kanban.service.services.TaskService;
 
@@ -15,8 +17,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     protected T taskManager;
 
-    protected RepositoryService repositoryService;
     protected TaskService taskService;
+    protected RepositoryService repositoryService;
+    protected HistoryService historyService;
+    protected PriorityService priorityService;
 
     protected abstract void setUp();
 
@@ -48,9 +52,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldFindAndReturnSubtaskListForAvailableEpic() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
-        TaskDTO epicDTO = getWithID(epic.getId());
 
-        List<Subtask> subtaskList = taskManager.getSubtasksForEpic(epicDTO);
+        List<Subtask> subtaskList = taskManager.getSubtasksForEpic(epic.getId());
 
         assertAll("Should return subtaskList which added to Epic and present in repositories",
                 () -> assertEquals(epic.getSubtasks(), subtaskList),
@@ -61,9 +64,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldReturnEmptySubtaskListWhenAvailableEpicHasNotSubtasks() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1);
-        TaskDTO epicDTO = getWithID(epic.getId());
 
-        List<Subtask> subtaskList = taskManager.getSubtasksForEpic(epicDTO);
+        List<Subtask> subtaskList = taskManager.getSubtasksForEpic(epic.getId());
 
         assertTrue(subtaskList.isEmpty());
         assertTrue(epic.getSubtasks().isEmpty());
@@ -75,7 +77,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertTrue(repositoryService.getAllEpic().isEmpty());
         assertThrows(NoSuchElementException.class,
-                () -> taskManager.getSubtasksForEpic(getWithID(taskIdForEmptyRepositories))
+                () -> taskManager.getSubtasksForEpic(taskIdForEmptyRepositories)
         );
     }
 
@@ -85,9 +87,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = taskManager.createEpic(EPIC_1);
         Subtask subtask = taskManager.createSubtask(SUBTASK_1);
 
-        taskManager.deleteTask(getWithID(task.getId()));
-        taskManager.deleteEpic(getWithID(epic.getId()));
-        taskManager.deleteSubtask(getWithID(subtask.getId()));
+        taskManager.deleteTask(task.getId());
+        taskManager.deleteEpic(epic.getId());
+        taskManager.deleteSubtask(subtask.getId());
 
         assertAll("Repositories should be empty after delete",
                 () -> assertTrue(repositoryService.getAllTask().isEmpty()),
@@ -101,7 +103,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         Subtask subtask = repositoryService.getAllSubtasks().getFirst();
 
-        taskManager.deleteSubtask(getWithID(subtask.getId()));
+        taskManager.deleteSubtask(subtask.getId());
 
         assertAll("Should delete subtask and update Epic",
                 () -> assertTrue(repositoryService.getAllSubtasks().isEmpty()),
@@ -113,7 +115,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void shouldDeleteIncludedSubtaskWhenDeleteEpic() throws Exception {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
 
-        taskManager.deleteEpic(getWithID(epic.getId()));
+        taskManager.deleteEpic(epic.getId());
 
         assertAll("Epic and Subtask repositories should be empty",
                 () -> assertTrue(repositoryService.getAllSubtasks().isEmpty()),
@@ -131,11 +133,11 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 () -> assertTrue(repositoryService.getAllEpic().isEmpty())
         );
         assertThrows(NoSuchElementException.class,
-                () -> taskManager.deleteTask(getWithID(taskIdForEmptyRepositories)));
+                () -> taskManager.deleteTask(taskIdForEmptyRepositories));
         assertThrows(NoSuchElementException.class,
-                () -> taskManager.deleteSubtask(getWithID(taskIdForEmptyRepositories)));
+                () -> taskManager.deleteSubtask(taskIdForEmptyRepositories));
         assertThrows(NoSuchElementException.class,
-                () -> taskManager.deleteEpic(getWithID(taskIdForEmptyRepositories)));
+                () -> taskManager.deleteEpic(taskIdForEmptyRepositories));
     }
 
     @Test

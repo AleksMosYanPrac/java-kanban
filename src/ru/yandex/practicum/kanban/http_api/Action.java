@@ -21,7 +21,7 @@ public enum Action {
 
     GET_HISTORY("GET", "/history"),
     GET_PRIORITIZED("GET", "/prioritized"),
-    UNKNOWN("","");
+    UNKNOWN("", "");
 
     private String method;
     private String path;
@@ -31,15 +31,15 @@ public enum Action {
         this.path = path;
     }
 
-    public boolean matchMethod(String method){
+    public boolean matchMethod(String method) {
         return this.method.equals(method);
     }
 
     public boolean matchURI(URI requestURI) {
         String[] request = requestURI.getPath().split("/");
         String[] path = this.path.split("/");
-        if(request.length == path.length){
-            if(path.length == 2){
+        if (request.length == path.length) {
+            if (path.length == 2) {
                 return path[1].matches(request[1]);
             } else if (path.length == 3) {
                 return request[2].matches("\\d+") && path[1].matches(request[1]);

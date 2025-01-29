@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import static com.google.gson.FormattingStyle.*;
+
 public class JsonConverterImpl implements ResponseConverter, RequestConverter {
 
     private final Gson gson;
@@ -158,7 +160,7 @@ public class JsonConverterImpl implements ResponseConverter, RequestConverter {
             private void writeAsIntArray(JsonWriter writer, List<Integer> list) throws IOException {
                 writer.beginArray();
                 String current = writer.getFormattingStyle().getIndent();
-                writer.setIndent(FormattingStyle.COMPACT.getIndent());
+                writer.setIndent(COMPACT.getIndent());
                 for (int i : list) {
                     writer.value(i);
                 }

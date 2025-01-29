@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6621227b-174d-48ee-a0a3-3d153ed74f95" name="Changes" comment="style: resolve checkstyle">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java-kanban.iml" beforeDir="false" afterPath="$PROJECT_DIR$/java-kanban.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -261,7 +259,7 @@
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "/Users/dandelion/dev/projects/practicum/java-kanban/test/ru/yandex/practicum/kanban/service/services",
     "last_opened_file_path": "/Users/dandelion/dev/projects/practicum/java-kanban/src/ru/yandex/practicum/kanban",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.25892043"
   }
@@ -399,14 +397,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729946181271</updated>
-    </task>
-    <task id="LOCAL-00084" summary="fix: update history when update model objects&#10;&#10;didn't update history by updated objects&#10;can possibly lost updated data">
-      <option name="closed" value="true" />
-      <created>1736601321747</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1736601321747</updated>
     </task>
     <task id="LOCAL-00085" summary="refactor: add main logic algorithms">
       <option name="closed" value="true" />
@@ -792,7 +782,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738170379083</updated>
     </task>
-    <option name="localTasksCounter" value="133" />
+    <task id="LOCAL-00133" summary="style: resolve checkstyle">
+      <option name="closed" value="true" />
+      <created>1738171184607</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1738171184607</updated>
+    </task>
+    <option name="localTasksCounter" value="134" />
     <servers />
   </component>
   <component name="UnknownFeatures">

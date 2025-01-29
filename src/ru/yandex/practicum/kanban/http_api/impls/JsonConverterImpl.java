@@ -52,9 +52,9 @@ public class JsonConverterImpl implements ResponseConverter, RequestConverter {
     @Override
     public List<TaskDTO> convertToList(String jsonArray) {
         JsonElement jsonElement = JsonParser.parseString(jsonArray);
-        if(jsonElement.isJsonArray()){
+        if (jsonElement.isJsonArray()) {
             return gson.fromJson(jsonArray, new ListTaskDTOTypeToken().getType());
-        }else{
+        } else {
             return List.of(convertToObject(jsonArray));
         }
     }
@@ -70,7 +70,7 @@ public class JsonConverterImpl implements ResponseConverter, RequestConverter {
             gsonBuilder.registerTypeAdapter(Task.class, new GSONBuilder.TaskTypeAdapter());
             gsonBuilder.registerTypeAdapter(Subtask.class, new GSONBuilder.SubtaskTypeAdapter());
             gsonBuilder.registerTypeAdapter(Epic.class, new GSONBuilder.EpicTypeAdapter());
-            if(prettyPrinting){
+            if (prettyPrinting) {
                 gsonBuilder.setPrettyPrinting();
             }
             return gsonBuilder.create();

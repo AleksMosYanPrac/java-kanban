@@ -34,7 +34,7 @@ public class HttpTaskServer {
         this.isStarted = false;
     }
 
-    public boolean getStatus(){
+    public boolean getStatus() {
         return isStarted;
     }
 }

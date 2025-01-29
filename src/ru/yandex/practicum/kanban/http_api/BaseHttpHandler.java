@@ -75,10 +75,10 @@ public abstract class BaseHttpHandler {
 
     protected int parsePathToIntId(String path) {
         String[] pathValues = path.split("/");
-        if(pathValues.length > 2){
+        if (pathValues.length > 2) {
             try {
                 return Integer.parseInt(pathValues[2]);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 return 0;
             }
         }

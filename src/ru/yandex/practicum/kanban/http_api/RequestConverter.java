@@ -8,5 +8,4 @@ public interface RequestConverter {
     TaskDTO convertToObject(String requestBody);
 
     List<TaskDTO> convertToList(String requestBody);
-
 }

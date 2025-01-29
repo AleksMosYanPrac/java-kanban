@@ -141,7 +141,7 @@ public class TaskManagerImpl implements TaskManager {
         Epic epicById = repositoryService.getEpicById(id).orElseThrow();
         Epic deletedEpic = repositoryService.removeEpic(epicById.getId());
         historyService.remove(deletedEpic.getId());
-        deletedEpic.getSubtasks().forEach(s->historyService.remove(s.getId()));
+        deletedEpic.getSubtasks().forEach(s -> historyService.remove(s.getId()));
         deletedEpic.getSubtasks().forEach(priorityService::delete);
         return deletedEpic;
     }

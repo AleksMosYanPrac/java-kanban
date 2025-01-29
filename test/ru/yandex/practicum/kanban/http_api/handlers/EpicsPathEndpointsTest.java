@@ -217,7 +217,7 @@ public class EpicsPathEndpointsTest {
     }
 
     @Test
-    void shouldDELETEAndFailWhenDeletedTaskNotFound() throws Exception {
+    void shouldDELETEAndFailWhenDeletedEpicNotFound() throws Exception {
         String path = "/epics";
         int responseCode = 404;
         Epic task = taskManager.createEpic(EPIC_1);

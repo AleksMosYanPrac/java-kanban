@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6621227b-174d-48ee-a0a3-3d153ed74f95" name="Changes" comment="style: resolve checkstyle">
+      <change afterPath="$PROJECT_DIR$/lib/gson-2.10.1-javadoc.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/gson-2.10.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-kanban.iml" beforeDir="false" afterPath="$PROJECT_DIR$/java-kanban.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/gson-2.11.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/yandex/practicum/kanban/http_api/impls/JsonConverterImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/yandex/practicum/kanban/http_api/impls/JsonConverterImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/ru/yandex/practicum/kanban/http_api/impls/JsonConverterImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/ru/yandex/practicum/kanban/http_api/impls/JsonConverterImplTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -309,42 +316,11 @@
       <recent name="ru.yandex.practicum.kanban.model" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PathToActionMatcherTest">
+  <component name="RunManager" selected="JUnit.JsonConverterImplTest">
     <configuration name="All in java-kanban" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="java-kanban" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="EpicsPathEndpointsTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="java-kanban" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ru.yandex.practicum.kanban.http_api.handlers.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ru.yandex.practicum.kanban.http_api.handlers" />
-      <option name="MAIN_CLASS_NAME" value="ru.yandex.practicum.kanban.http_api.handlers.EpicsPathEndpointsTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="EpicsPathEndpointsTest.shouldDELETEAndFailWhenDeletedEpicNotFound" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="java-kanban" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ru.yandex.practicum.kanban.http_api.handlers.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ru.yandex.practicum.kanban.http_api.handlers" />
-      <option name="MAIN_CLASS_NAME" value="ru.yandex.practicum.kanban.http_api.handlers.EpicsPathEndpointsTest" />
-      <option name="METHOD_NAME" value="shouldDELETEAndFailWhenDeletedEpicNotFound" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -360,6 +336,38 @@
       <option name="PACKAGE_NAME" value="ru.yandex.practicum.kanban.http_api.impls" />
       <option name="MAIN_CLASS_NAME" value="ru.yandex.practicum.kanban.http_api.impls.JsonConverterImplTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JsonConverterImplTest.canConvertEpicCollection" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-kanban" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.yandex.practicum.kanban.http_api.impls.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.yandex.practicum.kanban.http_api.impls" />
+      <option name="MAIN_CLASS_NAME" value="ru.yandex.practicum.kanban.http_api.impls.JsonConverterImplTest" />
+      <option name="METHOD_NAME" value="canConvertEpicCollection" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JsonConverterImplTest.canConvertEpicWithSubtask" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-kanban" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.yandex.practicum.kanban.http_api.impls.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.yandex.practicum.kanban.http_api.impls" />
+      <option name="MAIN_CLASS_NAME" value="ru.yandex.practicum.kanban.http_api.impls.JsonConverterImplTest" />
+      <option name="METHOD_NAME" value="canConvertEpicWithSubtask" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -381,11 +389,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PathToActionMatcherTest" />
         <item itemvalue="JUnit.JsonConverterImplTest" />
+        <item itemvalue="JUnit.JsonConverterImplTest.canConvertEpicCollection" />
+        <item itemvalue="JUnit.JsonConverterImplTest.canConvertEpicWithSubtask" />
+        <item itemvalue="JUnit.PathToActionMatcherTest" />
         <item itemvalue="JUnit.All in java-kanban" />
-        <item itemvalue="JUnit.EpicsPathEndpointsTest" />
-        <item itemvalue="JUnit.EpicsPathEndpointsTest.shouldDELETEAndFailWhenDeletedEpicNotFound" />
       </list>
     </recent_temporary>
   </component>
@@ -397,22 +405,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1729946181271</updated>
-    </task>
-    <task id="LOCAL-00085" summary="refactor: add main logic algorithms">
-      <option name="closed" value="true" />
-      <created>1736601350956</created>
-      <option name="number" value="00085" />
-      <option name="presentableId" value="LOCAL-00085" />
-      <option name="project" value="LOCAL" />
-      <updated>1736601350956</updated>
-    </task>
-    <task id="LOCAL-00086" summary="refactor: add new task manager">
-      <option name="closed" value="true" />
-      <created>1736862700993</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1736862700994</updated>
     </task>
     <task id="LOCAL-00087" summary="refactor: move architecture to service oriented">
       <option name="closed" value="true" />
@@ -790,7 +782,23 @@
       <option name="project" value="LOCAL" />
       <updated>1738171184607</updated>
     </task>
-    <option name="localTasksCounter" value="134" />
+    <task id="LOCAL-00134" summary="style: resolve checkstyle">
+      <option name="closed" value="true" />
+      <created>1738171992330</created>
+      <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
+      <option name="project" value="LOCAL" />
+      <updated>1738171992330</updated>
+    </task>
+    <task id="LOCAL-00135" summary="style: resolve checkstyle">
+      <option name="closed" value="true" />
+      <created>1738172013888</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1738172013888</updated>
+    </task>
+    <option name="localTasksCounter" value="136" />
     <servers />
   </component>
   <component name="UnknownFeatures">

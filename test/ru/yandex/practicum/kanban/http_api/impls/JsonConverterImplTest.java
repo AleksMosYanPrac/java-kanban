@@ -124,7 +124,7 @@ class JsonConverterImplTest {
         Subtask subtask_2 = new Subtask(3, "Subtask", "-", Status.NEW);
         epic.addSubtask(subtask_1);
         epic.addSubtask(subtask_2);
-
+        System.out.println(jsonConverter.convert(epic));
         assertEquals(json, jsonConverter.convert(epic));
     }
 
@@ -224,7 +224,7 @@ class JsonConverterImplTest {
         Subtask subtask2 = new Subtask(3, "Task", "-", Status.NEW);
         epic.addSubtask(subtask1);
         epic.addSubtask(subtask2);
-
+        System.out.println(jsonConverter.convert(List.of(epic)));
         assertEquals(json, jsonConverter.convert(List.of(epic)));
     }
 

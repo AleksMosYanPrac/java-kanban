@@ -1,221 +1,125 @@
 package ru.yandex.practicum.kanban.http_api.handlers;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.kanban.http_api.HttpTaskServer;
 import ru.yandex.practicum.kanban.model.Subtask;
 import ru.yandex.practicum.kanban.model.TaskDTO;
-import ru.yandex.practicum.kanban.service.managers.TaskManager;
-import ru.yandex.practicum.kanban.service.util.Managers;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.yandex.practicum.kanban.http_api.BaseHttpContext.HttpStatus.*;
 import static ru.yandex.practicum.kanban.service.TestDataDTO.*;
 
-public class SubtasksPathEndpointsTest {
+public class SubtasksPathEndpointsTest extends AbstractPathEndpointsTest {
 
-    private HttpTaskServer server;
-    private TaskManager taskManager;
-
-    private static int PORT = 8080;
-    private HttpClient client = HttpClient.newHttpClient();
-    private URI uri = URI.create("http://localhost:" + PORT);
-
-    @BeforeEach
-    void setUp() throws IOException {
-        this.taskManager = Managers.getDefault();
-        this.server = new HttpTaskServer(taskManager, PORT);
-        server.start();
-    }
-
-    @AfterEach
-    void setDown() {
-        server.stop();
-    }
+    private static final String PATH = "/subtasks";
 
     @Test
-    void shouldPostAndAddTask() throws Exception {
-        String path = "/subtasks";
-        int responseCode = 201;
-        String taskDTOJson = SUBTASK_1.toJson();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path))
-                .POST(HttpRequest.BodyPublishers.ofString(taskDTOJson))
-                .build();
+    void shouldPOSTAndAddSubtask() throws Exception {
+        String data = SUBTASK_1.toJson();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Subtask> tasksFromManager = taskManager.getAllSubtasks();
+        HttpResponse<String> response = httpClient.POST(PATH, data);
 
-        assertEquals(responseCode, response.statusCode());
-        assertNotNull(tasksFromManager);
-        assertEquals(1, tasksFromManager.size());
-        assertEquals("Subtask 1", tasksFromManager.get(0).getTitle());
+        assertEquals(CREATED, getStatusFromCode(response.statusCode()));
+        assertEquals(1, taskManager.getAllSubtasks().size());
+        assertEquals(converter.convert(taskManager.getAllSubtasks().getFirst()), response.body());
     }
 
     @Test
     void shouldPOSTAndUpdateTask() throws Exception {
-        String path = "/subtasks";
-        int responseCode = 201;
         Subtask task = taskManager.createSubtask(SUBTASK_1);
-        TaskDTO updated = new TaskDTO(task.getId(), "Subtask", "Updated", "IN_PROGRESS");
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path))
-                .POST(HttpRequest.BodyPublishers.ofString(updated.toJson()))
-                .build();
+        String data = new TaskDTO(task.getId(), "Task", "Updated", "IN_PROGRESS").toJson();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Subtask> tasksFromManager = taskManager.getAllSubtasks();
+        HttpResponse<String> response = httpClient.POST(PATH, data);
 
-        assertEquals(responseCode, response.statusCode());
-        assertNotNull(tasksFromManager);
-        assertEquals(1, tasksFromManager.size());
-        assertEquals("Updated", tasksFromManager.get(0).getDescription());
+        assertEquals(CREATED, getStatusFromCode(response.statusCode()));
+        assertEquals(1, taskManager.getAllSubtasks().size());
+        assertEquals("Updated", taskManager.getAllSubtasks().getFirst().getDescription());
+        assertEquals(converter.convert(taskManager.getAllSubtasks().getFirst()), response.body());
     }
 
     @Test
     void shouldPOSTAndFailOnTimeIntersection() throws Exception {
-        String path = "/subtasks";
-        int responseCode = 406;
-        Subtask task = taskManager.createSubtask(getDatedSubtask());
-        TaskDTO taskWithTimeIntersection = getDatedSubtask();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path))
-                .POST(HttpRequest.BodyPublishers.ofString(taskWithTimeIntersection.toJson()))
-                .build();
+        taskManager.createSubtask(getDatedSubtask());
+        String dataWithTimeIntersection = getDatedSubtask().toJson();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Subtask> tasksFromManager = taskManager.getAllSubtasks();
+        HttpResponse<String> response = httpClient.POST(PATH, dataWithTimeIntersection);
 
-        assertEquals(responseCode, response.statusCode());
-        assertNotNull(tasksFromManager);
-        assertEquals(1, tasksFromManager.size());
+        assertEquals(NOT_ACCEPTABLE, getStatusFromCode(response.statusCode()));
+        assertEquals(1, taskManager.getAllSubtasks().size());
+        assertTrue(response.body().isEmpty());
     }
 
     @Test
-    void shouldPOSTAndFailOnCreateOrUpdateTask() throws IOException, InterruptedException {
-        String path = "/subtasks";
-        int responseCode = 500;
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path))
-                .POST(HttpRequest.BodyPublishers.ofString(new TaskDTO().toJson()))
-                .build();
+    void shouldPOSTAndFailOnCreateOrUpdateSubtask() throws Exception {
+        String data = new TaskDTO().toJson();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Subtask> tasksFromManager = taskManager.getAllSubtasks();
+        HttpResponse<String> response = httpClient.POST(PATH, data);
 
-        assertEquals(responseCode, response.statusCode());
-        assertTrue(tasksFromManager.isEmpty());
+        assertEquals(INTERNAL_SERVER_ERROR, getStatusFromCode(response.statusCode()));
+        assertTrue(taskManager.getAllTasks().isEmpty());
+        assertTrue(response.body().isEmpty());
     }
 
     @Test
-    void shouldGETAndFindTaskById() throws Exception {
-        String path = "/subtasks";
-        int responseCode = 200;
+    void shouldGETAndFindSubtaskById() throws Exception {
         Subtask task = taskManager.createSubtask(SUBTASK_1);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path + "/" + task.getId()))
-                .GET()
-                .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Subtask> tasksFromManager = taskManager.getAllSubtasks();
+        HttpResponse<String> response = httpClient.GET(PATH + "/" + task.getId());
 
-        assertEquals(responseCode, response.statusCode());
-        assertNotNull(tasksFromManager);
-        assertEquals(1, tasksFromManager.size());
+        assertEquals(OK, getStatusFromCode(response.statusCode()));
+        assertEquals(1, taskManager.getAllSubtasks().size());
+        assertEquals(converter.convert(task), response.body());
     }
 
     @Test
     void shouldGETAndFailWhenCanNotFindTaskById() throws Exception {
-        String path = "/subtasks";
-        int responseCode = 404;
-        Subtask task = taskManager.createSubtask(SUBTASK_1);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path + "/" + 10))
-                .GET()
-                .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Subtask> tasksFromManager = taskManager.getAllSubtasks();
+        HttpResponse<String> response = httpClient.GET(PATH + "/" + 10);
 
-        assertEquals(responseCode, response.statusCode());
-        assertNotNull(tasksFromManager);
-        assertEquals(1, tasksFromManager.size());
+        assertEquals(NOT_FOUND, getStatusFromCode(response.statusCode()));
+        assertTrue(response.body().isEmpty());
     }
 
     @Test
     void shouldGETAndFindAllTasks() throws Exception {
-        String path = "/subtasks";
-        int responseCode = 200;
-        Subtask task = taskManager.createSubtask(SUBTASK_1);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path))
-                .GET()
-                .build();
+        taskManager.createSubtask(SUBTASK_1);
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Subtask> tasksFromManager = taskManager.getAllSubtasks();
+        HttpResponse<String> response = httpClient.GET(PATH);
 
-        assertEquals(responseCode, response.statusCode());
-        assertNotNull(tasksFromManager);
-        assertEquals(1, tasksFromManager.size());
+        assertEquals(OK, getStatusFromCode(response.statusCode()));
+        assertEquals(1, taskManager.getAllSubtasks().size());
+        assertEquals(converter.convert(taskManager.getAllSubtasks()), response.body());
     }
 
     @Test
     void shouldDELETEAndDeleteTaskById() throws Exception {
-        String path = "/subtasks";
-        int responseCode = 200;
         Subtask task = taskManager.createSubtask(SUBTASK_1);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path + "/" + task.getId()))
-                .DELETE()
-                .build();
 
         List<Subtask> tasksBeforeDelete = taskManager.getAllSubtasks();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.DELETE(PATH + "/" + task.getId());
         List<Subtask> tasksAfterDelete = taskManager.getAllSubtasks();
 
+        assertEquals(OK, getStatusFromCode(response.statusCode()));
         assertEquals(1, tasksBeforeDelete.size());
-        assertEquals(responseCode, response.statusCode());
         assertEquals(0, tasksAfterDelete.size());
+        assertEquals(converter.convert(task), response.body());
     }
 
     @Test
     void shouldDELETEAndFailWhenDeletedTaskNotFound() throws Exception {
-        String path = "/subtasks";
-        int responseCode = 404;
-        Subtask task = taskManager.createSubtask(SUBTASK_1);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(path + "/" + 10))
-                .DELETE()
-                .build();
+        HttpResponse<String> response = httpClient.DELETE(PATH + "/" + 10);
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        List<Subtask> tasksFromManager = taskManager.getAllSubtasks();
-
-        assertEquals(responseCode, response.statusCode());
-        assertNotNull(tasksFromManager);
-        assertEquals(1, tasksFromManager.size());
+        assertEquals(NOT_FOUND, getStatusFromCode(response.statusCode()));
+        assertTrue(response.body().isEmpty());
     }
 
     @Test
-    void shouldFailOnBadPath() throws Exception {
-        String badPath = "/subtasks/anyNotDigitalValue";
-        int responseCode = 400;
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(uri.resolve(badPath))
-                .GET()
-                .build();
+    void shouldFailOnBadIdParameterPath() throws Exception {
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.GET(PATH + "/anyNotDigitalValue");
 
-        assertEquals(responseCode, response.statusCode());
+        assertEquals(BAD_REQUEST, getStatusFromCode(response.statusCode()));
     }
 }

@@ -8,8 +8,8 @@ import java.net.InetSocketAddress;
 
 public class HttpTaskServer {
 
-    private final HttpServer httpServer;
-    private final int port;
+    private HttpServer httpServer;
+    private int port;
     private boolean isStarted;
 
     public HttpTaskServer(TaskManager taskManager, int port) throws IOException {

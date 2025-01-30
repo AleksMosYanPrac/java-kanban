@@ -1,4 +1,4 @@
-package ru.yandex.practicum.kanban.http_api.impls;
+package ru.yandex.practicum.kanban.http_api.convertors;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-
-//import static com.google.gson.FormattingStyle.*;
 
 public class JsonConverterImpl implements ResponseConverter, RequestConverter {
 
@@ -159,12 +157,10 @@ public class JsonConverterImpl implements ResponseConverter, RequestConverter {
 
             private void writeAsIntArray(JsonWriter writer, List<Integer> list) throws IOException {
                 writer.beginArray();
-                writer.setIndent("");
                 for (Integer i : list) {
                     writer.value(i);
                 }
                 writer.endArray();
-                writer.setIndent("  ");
             }
 
             @Override

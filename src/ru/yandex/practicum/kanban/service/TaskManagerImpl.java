@@ -62,10 +62,9 @@ public class TaskManagerImpl implements TaskManager {
         Epic newEpic = taskService.createEpic(epic, subtasks);
         if (newEpic.getSubtasks().stream().anyMatch(priorityService::hasTimeIntersection)) {
             throw new PriorityManagerTimeIntersection("One or more subtasks has time intersection with another Tasks");
-        } else {
-            for (Subtask subtask : newEpic.getSubtasks()) {
-                priorityService.add(subtask);
-            }
+        }
+        for (Subtask subtask : newEpic.getSubtasks()) {
+            priorityService.add(subtask);
         }
         repositoryService.addEpic(newEpic);
         return newEpic;

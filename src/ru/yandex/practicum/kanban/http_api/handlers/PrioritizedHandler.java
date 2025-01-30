@@ -2,13 +2,12 @@ package ru.yandex.practicum.kanban.http_api.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.yandex.practicum.kanban.http_api.Action;
-import ru.yandex.practicum.kanban.http_api.BaseHttpHandler;
-import ru.yandex.practicum.kanban.http_api.RequestConverter;
-import ru.yandex.practicum.kanban.http_api.ResponseConverter;
+import ru.yandex.practicum.kanban.http_api.*;
 import ru.yandex.practicum.kanban.service.managers.TaskManager;
 
 import java.io.IOException;
+
+import static ru.yandex.practicum.kanban.http_api.BaseHttpContext.HttpStatus.*;
 
 public final class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
 
@@ -24,15 +23,12 @@ public final class PrioritizedHandler extends BaseHttpHandler implements HttpHan
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        super.httpExchange = exchange;
         Action action = getAction(exchange);
         switch (action) {
-            case GET_PRIORITIZED -> getPrioritized(exchange, 200);
-            default -> super.writeBadRequest(exchange);
+            case GET_PRIORITIZED -> get(taskManager::getPrioritizedTasks);
+            default -> super.writeResponse(BAD_REQUEST);
         }
-    }
-
-    private void getPrioritized(HttpExchange exchange, int code) throws IOException {
-        super.writeSuccess(exchange, responseConverter.convert(taskManager.getPrioritizedTasks()), code);
     }
 
     @Override

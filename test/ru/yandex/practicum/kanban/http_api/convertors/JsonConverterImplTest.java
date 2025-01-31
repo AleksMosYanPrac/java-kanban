@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.kanban.model.*;
 
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +12,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,9 +23,7 @@ class JsonConverterImplTest {
 
     @BeforeAll
     static void parseURI() throws Exception {
-        URI uri = Objects.requireNonNull(
-                JsonConverterImplTest.class.getClassLoader().getResource("resources/testData.json")).toURI();
-        String data = Files.readString(Path.of(uri), StandardCharsets.UTF_8);
+        String data = Files.readString(Path.of("test/resources/testData.json"), StandardCharsets.UTF_8);
         JsonElement element = JsonParser.parseString(data);
         JsonArray jsonArray = element.getAsJsonArray();
         for (JsonElement el : jsonArray) {

@@ -1,5 +1,7 @@
 package ru.yandex.practicum.kanban.model;
 
+import java.util.Objects;
+
 public class TaskDTO {
 
     private int id;
@@ -88,5 +90,45 @@ public class TaskDTO {
 
     public void setDurationInMinutes(long durationInMinutes) {
         this.durationInMinutes = durationInMinutes;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskDTO{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", durationInMinutes=" + durationInMinutes +
+                '}';
+    }
+
+    public String toJson() {
+        return "{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", durationInMinutes=" + durationInMinutes +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskDTO taskDTO = (TaskDTO) o;
+        return getId() == taskDTO.getId() && getDurationInMinutes() == taskDTO.getDurationInMinutes() &&
+                Objects.equals(getTitle(), taskDTO.getTitle()) &&
+                Objects.equals(getDescription(), taskDTO.getDescription()) &&
+                Objects.equals(getStatus(), taskDTO.getStatus()) &&
+                Objects.equals(getStartTime(), taskDTO.getStartTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getDescription(), getStatus(), getStartTime(), getDurationInMinutes());
     }
 }

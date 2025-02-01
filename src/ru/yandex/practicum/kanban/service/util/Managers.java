@@ -13,7 +13,6 @@ import ru.yandex.practicum.kanban.repository.impls.in_file.InFileTaskRepositoryI
 import ru.yandex.practicum.kanban.repository.impls.in_file.datasource.CSVFileDataSource;
 import ru.yandex.practicum.kanban.repository.impls.in_memory.*;
 import ru.yandex.practicum.kanban.service.*;
-import ru.yandex.practicum.kanban.service.managers.PriorityManager;
 import ru.yandex.practicum.kanban.service.managers.TaskManager;
 import ru.yandex.practicum.kanban.service.services.*;
 import ru.yandex.practicum.kanban.service.services.impls.HistoryServiceImpl;
@@ -32,38 +31,44 @@ public class Managers {
         Repository<Task> taskRepository = new InMemoryTaskRepositoryImpl();
         Repository<Epic> epicRepository = new InMemoryEpicRepositoryImpl();
         Repository<Subtask> subtaskRepository = new InMemorySubtaskRepositoryImpl();
+        HistoryRepository historyRepository = new InMemoryHistoryRepositoryWithCopyAndLimitElements();
 
         TaskService taskService = new TaskServiceImpl();
         RepositoryService repositoryService =
                 new RepositoryServiceImpl(taskRepository, epicRepository, subtaskRepository);
+        HistoryService historyService = new HistoryServiceImpl(historyRepository);
+        PriorityService priorityService = new PriorityServiceImpl();
 
-        return new TaskManagerImpl(taskService, repositoryService);
+        return new TaskManagerImpl(taskService, repositoryService, historyService, priorityService);
     }
 
     public static TaskManager getDefault(Repository<Task> taskRepository,
                                          Repository<Subtask> subtaskRepository,
-                                         Repository<Epic> epicRepository) {
+                                         Repository<Epic> epicRepository,
+                                         HistoryRepository historyRepository) {
 
         TaskService taskService = new TaskServiceImpl();
         RepositoryService repositoryService =
                 new RepositoryServiceImpl(taskRepository, epicRepository, subtaskRepository);
+        HistoryService historyService = new HistoryServiceImpl(historyRepository);
+        PriorityService priorityService = new PriorityServiceImpl();
 
-        return new TaskManagerImpl(taskService, repositoryService);
+        return new TaskManagerImpl(taskService, repositoryService, historyService, priorityService);
     }
 
-    public static TaskManager fileStoredTaskManager(Path pathToFile) {
-
-        FileDataSource dataSource = createDataSource(pathToFile);
-
-        Repository<Task> taskRepository = new InFileTaskRepositoryImpl(dataSource);
-        Repository<Epic> epicRepository = new InFileEpicRepositoryImpl(dataSource);
-        Repository<Subtask> subtaskRepository = new InFileSubtaskRepositoryImpl(dataSource);
+    public static TaskManager defaultTaskManagerWithoutCopyInHistory() {
+        Repository<Task> taskRepository = new InMemoryTaskRepositoryImpl();
+        Repository<Epic> epicRepository = new InMemoryEpicRepositoryImpl();
+        Repository<Subtask> subtaskRepository = new InMemorySubtaskRepositoryImpl();
+        HistoryRepository historyRepository = new InMemoryHistoryRepositoryWithoutCopyAndLimitElements();
 
         TaskService taskService = new TaskServiceImpl();
         RepositoryService repositoryService =
                 new RepositoryServiceImpl(taskRepository, epicRepository, subtaskRepository);
+        HistoryService historyService = new HistoryServiceImpl(historyRepository);
+        PriorityService priorityService = new PriorityServiceImpl();
 
-        return new TaskManagerImpl(taskService, repositoryService);
+        return new TaskManagerImpl(taskService, repositoryService, historyService, priorityService);
     }
 
     public static TaskManager fileBackedTaskManager(Path pathToFile) {
@@ -74,37 +79,20 @@ public class Managers {
         return new FileBackedTaskManager(taskRepository, epicRepository, subtaskRepository, pathToFile);
     }
 
-    public static PriorityManager prioritizedHistoricalTaskManager() {
-        Repository<Task> taskRepository = new InMemoryTaskRepositoryImpl();
-        Repository<Epic> epicRepository = new InMemoryEpicRepositoryImpl();
-        Repository<Subtask> subtaskRepository = new InMemorySubtaskRepositoryImpl();
+    public static TaskManager fileStoredTaskManager(Path pathToFile) {
+        FileDataSource dataSource = new CSVFileDataSource(pathToFile);
+
+        Repository<Task> taskRepository = new InFileTaskRepositoryImpl(dataSource);
+        Repository<Epic> epicRepository = new InFileEpicRepositoryImpl(dataSource);
+        Repository<Subtask> subtaskRepository = new InFileSubtaskRepositoryImpl(dataSource);
+        HistoryRepository historyRepository = new InMemoryHistoryRepositoryWithoutCopyAndLimitElements();
 
         TaskService taskService = new TaskServiceImpl();
-        RepositoryService repositoryService = createDefaultRepositoryService();
-        HistoryService historyService = new HistoryServiceImpl(createDefaultHistoryRepository());
+        RepositoryService repositoryService =
+                new RepositoryServiceImpl(taskRepository, epicRepository, subtaskRepository);
+        HistoryService historyService = new HistoryServiceImpl(historyRepository);
         PriorityService priorityService = new PriorityServiceImpl();
 
-        return new PrioritizedHistoricalTaskManagerImpl(
-                taskService,
-                repositoryService,
-                historyService,
-                priorityService
-        );
-    }
-
-    private static RepositoryService createDefaultRepositoryService() {
-        Repository<Task> taskRepository = new InMemoryTaskRepositoryImpl();
-        Repository<Epic> epicRepository = new InMemoryEpicRepositoryImpl();
-        Repository<Subtask> subtaskRepository = new InMemorySubtaskRepositoryImpl();
-
-        return new RepositoryServiceImpl(taskRepository, epicRepository, subtaskRepository);
-    }
-
-    private static HistoryRepository createDefaultHistoryRepository() {
-        return new InMemoryHistoryRepositoryWithCopyAndLimitElements();
-    }
-
-    private static FileDataSource createDataSource(Path pathToFile) {
-        return new CSVFileDataSource(pathToFile);
+        return new TaskManagerImpl(taskService, repositoryService, historyService, priorityService);
     }
 }

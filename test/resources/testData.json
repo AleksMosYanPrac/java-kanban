@@ -1,0 +1,123 @@
+[
+  [
+    {
+      "type": "task",
+      "id": 1,
+      "title": "Task",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60
+    },
+    {
+      "type": "subtask",
+      "id": 1,
+      "title": "Task",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60,
+      "epic_id": null
+    },
+    {
+      "type": "subtask",
+      "id": 1,
+      "title": "Task",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60,
+      "epic_id": 2
+    },
+    {
+      "type": "epic",
+      "id": 1,
+      "title": "Epic",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60,
+      "subtasksId": []
+    },
+    {
+      "type": "epic",
+      "id": 1,
+      "title": "Epic",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60,
+      "subtasksId": [
+        2,
+        3
+      ]
+    }
+  ],
+  [
+    {
+      "type": "task",
+      "id": 1,
+      "title": "Task",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60
+    },
+    {
+      "type": "task",
+      "id": 2,
+      "title": "Task",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60
+    }
+  ],
+  [
+    {
+      "type": "subtask",
+      "id": 1,
+      "title": "Subtask",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60,
+      "epic_id": null
+    },
+    {
+      "type": "subtask",
+      "id": 2,
+      "title": "Subtask",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "09:36 27.01.2025",
+      "endTime": "10:36 27.01.2025",
+      "durationInMinutes": 60,
+      "epic_id": null
+    }
+  ],
+  [
+    {
+      "type": "epic",
+      "id": 2,
+      "title": "Epic",
+      "description": "-",
+      "status": "NEW",
+      "startTime": "15:42 29.01.2025",
+      "endTime": "16:42 29.01.2025",
+      "durationInMinutes": 60,
+      "subtasksId": [
+        1,
+        3
+      ]
+    }
+  ]
+]

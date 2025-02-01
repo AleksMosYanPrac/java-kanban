@@ -5,10 +5,8 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.model.TaskDTO;
 import ru.yandex.practicum.kanban.service.exceptions.PriorityManagerTimeIntersection;
-import ru.yandex.practicum.kanban.service.managers.HistoryManager;
-import ru.yandex.practicum.kanban.service.managers.PriorityManager;
+import ru.yandex.practicum.kanban.service.managers.TaskManager;
 import ru.yandex.practicum.kanban.service.services.PriorityService;
-import ru.yandex.practicum.kanban.service.services.impls.PriorityServiceImpl;
 
 import java.util.List;
 import java.util.Set;
@@ -16,22 +14,16 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.yandex.practicum.kanban.service.TestDataDTO.*;
 
-class PrioritizedHistoricalTaskManagerImplTest
-        extends HistoricalTaskManagerWithoutCopyAndLimitInHistoryTest {
+class DefaultTaskManagerImplPriorityTest extends DefaultTaskManagerImplTest {
 
-    private PriorityManager priorityManager;
+    private TaskManager priorityManager;
     PriorityService priorityService;
 
     @BeforeEach
     protected void setUp() {
         super.setUp();
-        priorityService = new PriorityServiceImpl();
-        priorityManager = new PrioritizedHistoricalTaskManagerImpl(
-                taskService,
-                repositoryService,
-                historyService,
-                priorityService);
-        historyManager = (HistoryManager) priorityManager;
+        this.priorityService = super.priorityService;
+        this.priorityManager = super.taskManager;
     }
 
     @Test

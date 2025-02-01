@@ -69,7 +69,7 @@ public class FileBackedTaskManagerTest {
         int linesWithData = 1;
 
         List<String> linesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
-        taskManager.deleteTask(getWithID(task.getId()));
+        taskManager.deleteTask(task.getId());
         List<String> linesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 
         assertEquals(linesWithData + linesWithColumnLabels, linesBeforeDelete.size());
@@ -83,7 +83,7 @@ public class FileBackedTaskManagerTest {
         int linesWithData = 2;
 
         List<String> linesBeforeDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
-        taskManager.deleteEpic(getWithID(addedEpic.getId()));
+        taskManager.deleteEpic(addedEpic.getId());
         List<String> linesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 
         assertEquals(linesWithData + linesWithColumnLabels, linesBeforeDelete.size());
@@ -95,7 +95,7 @@ public class FileBackedTaskManagerTest {
         Epic epic = taskManager.createEpic(EPIC_1, SUBTASK_1);
         Subtask addedSubtask = epic.getSubtasks().getFirst();
 
-        taskManager.deleteSubtask(getWithID(addedSubtask.getId()));
+        taskManager.deleteSubtask(addedSubtask.getId());
         Epic updatedEpic = taskManager.getEpicById(epic.getId());
         List<String> linesAfterDelete = Files.readAllLines(pathToFile, StandardCharsets.UTF_8);
 

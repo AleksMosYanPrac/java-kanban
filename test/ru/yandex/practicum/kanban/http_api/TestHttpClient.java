@@ -17,7 +17,6 @@ public class TestHttpClient {
 
     public HttpResponse<String> POST(String path, String body) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
                 .uri(serverURI.resolve(path))
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
@@ -27,7 +26,6 @@ public class TestHttpClient {
 
     public HttpResponse<String> GET(String path) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
                 .uri(serverURI.resolve(path))
                 .GET()
                 .build();
@@ -37,7 +35,6 @@ public class TestHttpClient {
 
     public HttpResponse<String> DELETE(String path) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
                 .uri(serverURI.resolve(path))
                 .DELETE()
                 .build();

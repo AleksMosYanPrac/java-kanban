@@ -20,7 +20,7 @@ public class SubtasksPathEndpointsTest extends AbstractPathEndpointsTest {
         String data = SUBTASK_1.toJson();
 
         HttpResponse<String> response = httpClient.POST(PATH, data);
-
+        System.out.println(response);
         assertEquals(CREATED, getStatusFromCode(response.statusCode()));
         assertEquals(1, taskManager.getAllSubtasks().size());
         assertEquals(converter.convert(taskManager.getAllSubtasks().getFirst()), response.body());
